@@ -31,6 +31,7 @@ def main():
             self.x = x
             vec = pygame.math.Vector2(0,self.spd)
             self.vec = pygame.math.Vector2.rotate(vec,random.uniform(-30,30))
+            self.fail = False
         def reflect(self,dir):
             if dir == "v":
                 self.vec = self.vec.reflect(pygame.math.Vector2(1,0))
@@ -60,8 +61,12 @@ def main():
     def checkHits():
         if ball.x <= ball.rad or ball.x >= WIDTH - ball.rad:
             ball.reflect("v")
-        if ball.y <= ball.rad or (ball.y > bar.y - ball.rad and ball.x > bar.x and ball.x < bar.x + BAR_WIDTH):
+        if ball.y <= ball.rad:
             ball.reflect("h")
+        if ball.y > bar.y - ball.rad and ball.x > bar.x and ball.x < bar.x + BAR_WIDTH and not ball.fail:
+            ball.reflect("h")
+        elif ball.y > bar.y -ball.rad and not (ball.x > bar.x and ball.x < bar.x + BAR_WIDTH):
+            ball.fail = True
 
     def controlBall():
         if start:

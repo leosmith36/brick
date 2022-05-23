@@ -66,24 +66,27 @@ def main():
             ball.reflect("v")
         elif ball.y <= ball.rad:
             ball.reflect("h")
-        if (
-            ball.y > bar.y - ball.rad and 
-            ball.x >= bar.x and 
-            ball.x <= bar.x + BAR_WIDTH
+        elif (
+            ball.rect.bottom > bar.rect.top and 
+            ball.rect.right >= bar.rect.left and 
+            ball.rect.left <= bar.rect.right and
+            ball.vec.y < 0
         ):
             ball.reflect("h")
         elif (
-            ball.y >= bar.y and
-            ball.y <= bar.y + BAR_HEIGHT and
-            ball.x >= bar.x - ball.rad and
-            ball.x > bar.x + ball.rad
+            ball.rect.bottom >= bar.rect.top and
+            ball.rect.top <= bar.rect.bottom and
+            ball.rect.right >= bar.rect.left and
+            #ball.rect.left > bar.rect.centerx and
+            ball.vec.x > 0
         ):
             ball.reflect("v")
         elif (
-            ball.y >= bar.y and
-            ball.y <= bar.y + BAR_HEIGHT and
-            ball.x <= bar.x + ball.rad + BAR_WIDTH and
-            ball.x < bar.x - ball.rad + BAR_WIDTH
+            ball.rect.bottom >= bar.rect.top and
+            ball.rect.top <= bar.rect.bottom and
+            ball.rect.left <= bar.rect.right and
+            #ball.rect.right < bar.rect.centerx and 
+            ball.vec.x > 0
         ):
             ball.reflect("v")
 
@@ -92,28 +95,32 @@ def main():
                 ball.x <= brick.x + BRICK_WIDTH and 
                 ball.x >= brick.x and
                 ball.y <= brick.y + BRICK_HEIGHT + ball.rad and 
-                ball.y > brick.y
+                ball.y > brick.y and
+                ball.vec.y > 0
             ):
                 ball.reflect("h")
             elif (
                 ball.x <= brick.x + BRICK_WIDTH and 
                 ball.x >= brick.x and
                 ball.y >= brick.y - ball.rad and 
-                ball.y < brick.y + BRICK_HEIGHT
+                ball.y < brick.y + BRICK_HEIGHT and
+                ball.vec.y < 0
             ):
                 ball.reflect("h")
-            if (
+            elif (
                 ball.x >= brick.x - ball.rad and
                 ball.x < brick.x + BRICK_WIDTH and
                 ball.y >= brick.y and
-                ball.y <= brick.y + BRICK_HEIGHT
+                ball.y <= brick.y + BRICK_HEIGHT and
+                ball.vec.x < 0
             ):
                 ball.reflect("v")
             elif (
                 ball.x <= brick.x + ball.rad + BRICK_WIDTH and
                 ball.x > brick.x and
                 ball.y >= brick.y and
-                ball.y <= brick.y + BRICK_HEIGHT
+                ball.y <= brick.y + BRICK_HEIGHT and
+                ball.vec.x > 0
             ):
                 ball.reflect("v")
     def controlBall():

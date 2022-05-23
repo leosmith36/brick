@@ -29,9 +29,10 @@ def main():
             self.rad = rad
             self.y = y
             self.x = x
-            vec = pygame.math.Vector2(0,self.spd)
-            self.vec = pygame.math.Vector2.rotate(vec,random.uniform(-30,30))
-            self.fail = False
+            self.vec = pygame.math.Vector2(0,self.spd)
+            #self.vec = pygame.math.Vector2.rotate(self.vec,random.uniform(-30,30))
+            self.vec = pygame.math.Vector2.rotate(self.vec,-30)
+            self.blit()
         def reflect(self,dir):
             if dir == "v":
                 self.vec = self.vec.reflect(pygame.math.Vector2(1,0))
@@ -45,6 +46,7 @@ def main():
             self.x = x
             self.y = y
             self.size = (BAR_WIDTH,BAR_HEIGHT)
+            self.blit()
         def blit(self):
             self.rect = pygame.draw.rect(WIN,BLUE,pygame.Rect((self.x,self.y),self.size))
 
@@ -55,19 +57,65 @@ def main():
             self.y = y
             self.size = (BRICK_WIDTH,BRICK_HEIGHT)
             self.hits = hits
+            self.blit()
         def blit(self):
             self.rect = pygame.draw.rect(WIN,self.color,pygame.Rect((self.x,self.y),self.size))
 
     def checkHits():
         if ball.x <= ball.rad or ball.x >= WIDTH - ball.rad:
             ball.reflect("v")
-        if ball.y <= ball.rad:
+        elif ball.y <= ball.rad:
             ball.reflect("h")
-        if ball.y > bar.y - ball.rad and ball.x > bar.x and ball.x < bar.x + BAR_WIDTH and not ball.fail:
+        if (
+            ball.y > bar.y - ball.rad and 
+            ball.x >= bar.x and 
+            ball.x <= bar.x + BAR_WIDTH
+        ):
             ball.reflect("h")
-        elif ball.y > bar.y -ball.rad and not (ball.x > bar.x and ball.x < bar.x + BAR_WIDTH):
-            ball.fail = True
+        elif (
+            ball.y >= bar.y and
+            ball.y <= bar.y + BAR_HEIGHT and
+            ball.x >= bar.x - ball.rad and
+            ball.x > bar.x + ball.rad
+        ):
+            ball.reflect("v")
+        elif (
+            ball.y >= bar.y and
+            ball.y <= bar.y + BAR_HEIGHT and
+            ball.x <= bar.x + ball.rad + BAR_WIDTH and
+            ball.x < bar.x - ball.rad + BAR_WIDTH
+        ):
+            ball.reflect("v")
 
+        for brick in bricks:
+            if (
+                ball.x <= brick.x + BRICK_WIDTH and 
+                ball.x >= brick.x and
+                ball.y <= brick.y + BRICK_HEIGHT + ball.rad and 
+                ball.y > brick.y
+            ):
+                ball.reflect("h")
+            elif (
+                ball.x <= brick.x + BRICK_WIDTH and 
+                ball.x >= brick.x and
+                ball.y >= brick.y - ball.rad and 
+                ball.y < brick.y + BRICK_HEIGHT
+            ):
+                ball.reflect("h")
+            if (
+                ball.x >= brick.x - ball.rad and
+                ball.x < brick.x + BRICK_WIDTH and
+                ball.y >= brick.y and
+                ball.y <= brick.y + BRICK_HEIGHT
+            ):
+                ball.reflect("v")
+            elif (
+                ball.x <= brick.x + ball.rad + BRICK_WIDTH and
+                ball.x > brick.x and
+                ball.y >= brick.y and
+                ball.y <= brick.y + BRICK_HEIGHT
+            ):
+                ball.reflect("v")
     def controlBall():
         if start:
             ball.x -= ball.vec.x

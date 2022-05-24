@@ -62,9 +62,10 @@ def main():
             self.rect = pygame.draw.rect(WIN,self.color,pygame.Rect((self.x,self.y),self.size))
 
     def checkHits():
-        if ball.x <= ball.rad or ball.x >= WIDTH - ball.rad:
+        ctime = pygame.time.get_ticks()
+        if (ball.rect.left <= 0 and ball.vec.x > 0) or (ball.rect.right >= WIDTH and ball.vec.x < 0):
             ball.reflect("v")
-        elif ball.y <= ball.rad:
+        elif ball.rect.top <= 0 and ball.vec.y > 0:
             ball.reflect("h")
         elif (
             ball.rect.bottom > bar.rect.top and 
@@ -78,7 +79,7 @@ def main():
             ball.rect.top <= bar.rect.bottom and
             ball.rect.right >= bar.rect.left and
             #ball.rect.left > bar.rect.centerx and
-            ball.vec.x > 0
+            ball.vec.x < 0
         ):
             ball.reflect("v")
         elif (

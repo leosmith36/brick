@@ -21,6 +21,8 @@ BAR_HEIGHT = 20
 BRICK_WIDTH = 50
 BRICK_HEIGHT = 25
 
+COOLDOWN = 100
+
 def main():
 
     class Ball():
@@ -32,6 +34,7 @@ def main():
             self.vec = pygame.math.Vector2(0,self.spd)
             #self.vec = pygame.math.Vector2.rotate(self.vec,random.uniform(-30,30))
             self.vec = pygame.math.Vector2.rotate(self.vec,-30)
+            self.ntime = pygame.time.get_ticks()
             self.blit()
         def reflect(self,dir):
             if dir == "v":
@@ -51,16 +54,21 @@ def main():
             self.rect = pygame.draw.rect(WIN,BLUE,pygame.Rect((self.x,self.y),self.size))
 
     class Brick():
-        def __init__(self,x,y,color,hits):
+        def __init__(self,x,y,color,hits,key):
             self.color = color
             self.x = x
             self.y = y
             self.size = (BRICK_WIDTH,BRICK_HEIGHT)
             self.hits = hits
+            self.key = key
             self.blit()
         def blit(self):
             if self.hits <= 0:
-                bricks.remove(self)
+                for brick in bricks:
+                    if brick.key == self.key:
+                        bricks.remove(brick)
+            elif self.hits == 1:
+                self.color = RED
             self.rect = pygame.draw.rect(WIN,self.color,pygame.Rect((self.x,self.y),self.size))
 
     run = True
@@ -68,7 +76,20 @@ def main():
     clock = pygame.time.Clock()
     ball = Ball(BALL_SPEED,450,399,BALL_RAD)
     bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)
-    bricks = [Brick(100,100,GREEN,1)]        
+    layout = ["g"*10]*5       
+    bricks = []
+    key = 0
+    y = 50
+    for item in layout:
+        length = len(item)
+        total_length = BRICK_WIDTH*length + 5*(length-1)
+        x = (WIDTH - total_length)//2
+        for letter in item:
+            if letter == "g":
+                bricks.append(Brick(x,y,GREEN,2,key))
+                x += BRICK_WIDTH + 5
+                key += 1
+        y += BRICK_HEIGHT + 5
 
     def checkHits():
         collide = False
@@ -86,7 +107,11 @@ def main():
         ):
             ball.reflect("h")
 
+        collided = False
         for brick in bricks:
+            ctime = pygame.time.get_ticks()
+            if collided == True or ctime - ball.ntime <= COOLDOWN:
+                continue
             if (
                 ball.rect.centerx <= brick.rect.right and 
                 ball.rect.centerx >= brick.rect.left and
@@ -129,6 +154,8 @@ def main():
                 collide = True
             if collide:
                 brick.hits -= 1
+                collided = True
+                ball.ntime = ctime
 
     def controlBall():
         if start:
@@ -145,6 +172,8 @@ def main():
         bar.blit()
         for brick in bricks:
             brick.blit()
+                    
+
         pygame.display.update()
 
     

@@ -18,8 +18,8 @@ BALL_RAD = 10
 BAR_WIDTH = 100
 BAR_HEIGHT = 20
 
-BRICK_WIDTH = 40
-BRICK_HEIGHT = 20
+BRICK_WIDTH = 50
+BRICK_HEIGHT = 25
 
 def main():
 
@@ -36,7 +36,7 @@ def main():
         def reflect(self,dir):
             if dir == "v":
                 self.vec = self.vec.reflect(pygame.math.Vector2(1,0))
-            else:
+            elif dir == "h":
                 self.vec = self.vec.reflect(pygame.math.Vector2(0,1))
         def blit(self):
             self.rect = pygame.draw.circle(WIN,RED,(self.x,self.y),self.rad)
@@ -59,71 +59,77 @@ def main():
             self.hits = hits
             self.blit()
         def blit(self):
+            if self.hits <= 0:
+                bricks.remove(self)
             self.rect = pygame.draw.rect(WIN,self.color,pygame.Rect((self.x,self.y),self.size))
 
+    run = True
+    start = False
+    clock = pygame.time.Clock()
+    ball = Ball(BALL_SPEED,450,399,BALL_RAD)
+    bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)
+    bricks = [Brick(100,100,GREEN,1)]        
+
     def checkHits():
+        collide = False
         if (ball.rect.left <= 0 and ball.vec.x > 0) or (ball.rect.right >= WIDTH and ball.vec.x < 0):
             ball.reflect("v")
         elif ball.rect.top <= 0 and ball.vec.y > 0:
             ball.reflect("h")
-        elif (
+        
+        if (
             ball.rect.bottom >= bar.rect.top and
             ball.rect.bottom <= bar.rect.bottom and
-            ball.rect.right >= bar.rect.left and 
-            ball.rect.left <= bar.rect.right and
+            ball.rect.centerx >= bar.rect.left and 
+            ball.rect.centerx <= bar.rect.right and
             ball.vec.y < 0
         ):
             ball.reflect("h")
-        elif (
-            ball.rect.bottom >= bar.rect.top and
-            ball.rect.top <= bar.rect.bottom and
-            ball.rect.right >= bar.rect.left and
-            ball.vec.y < 0 and
-            ball.vec.x < 0
-        ):
-            ball.reflect("v")
-        elif (
-            ball.rect.bottom >= bar.rect.top and
-            ball.rect.top <= bar.rect.bottom and
-            ball.rect.left <= bar.rect.right and
-            ball.vec.y < 0 and 
-            ball.vec.x > 0
-        ):
-            ball.reflect("v")
 
         for brick in bricks:
             if (
-                ball.rect.left <= brick.rect.right and 
-                ball.rect.right >= brick.rect.left and
+                ball.rect.centerx <= brick.rect.right and 
+                ball.rect.centerx >= brick.rect.left and
                 ball.rect.top <= brick.rect.bottom and 
-                ball.rect.top >= brick.rect.top and
+                ball.rect.top > brick.rect.top and
+                ball.rect.bottom > brick.rect.bottom and
                 ball.vec.y > 0
             ):
                 ball.reflect("h")
+                collide = True
             elif (
-                ball.rect.left <= brick.rect.right and 
-                ball.rect.right >= brick.rect.left and
+                ball.rect.centerx <= brick.rect.right and 
+                ball.rect.centerx >= brick.rect.left and
                 ball.rect.bottom >= brick.rect.top and 
-                ball.rect.bottom <= brick.rect.bottom and
+                ball.rect.bottom < brick.rect.bottom and
+                ball.rect.top < brick.rect.top and
                 ball.vec.y < 0
             ):
                 ball.reflect("h")
+                collide = True
             elif (
                 ball.rect.left <= brick.rect.right and
-                ball.rect.left >= brick.rect.left and
-                ball.rect.top <= brick.rect.bottom and
-                ball.rect.bottom >= brick.rect.top and
-                ball.vec.x < 0
-            ):
-                ball.reflect("v")
-            elif (
-                ball.rect.right >= brick.rect.left and
-                ball.rect.right <= brick.rect.right and
-                ball.rect.bottom >= brick.rect.top and
-                ball.rect.top <= brick.rect.bottom and
+                ball.rect.left > brick.rect.left and
+                ball.rect.centery <= brick.rect.bottom and
+                ball.rect.centery >= brick.rect.top and
+                ball.rect.right > brick.rect.right and
                 ball.vec.x > 0
             ):
                 ball.reflect("v")
+                collide = True
+            elif (
+                ball.rect.right >= brick.rect.left and
+                ball.rect.right <= brick.rect.right and
+                ball.rect.centery >= brick.rect.top and
+                ball.rect.centery <= brick.rect.bottom and
+                ball.rect.left < brick.rect.left and
+                ball.vec.x < 0
+            ):
+                ball.reflect("v")
+                collide = True
+            if collide:
+                brick.hits -= 1
+
     def controlBall():
         if start:
             ball.x -= ball.vec.x
@@ -141,12 +147,7 @@ def main():
             brick.blit()
         pygame.display.update()
 
-    run = True
-    start = False
-    clock = pygame.time.Clock()
-    ball = Ball(BALL_SPEED,450,399,BALL_RAD)
-    bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)
-    bricks = [Brick(100,100,GREEN,3)]
+    
 
     while run:
         clock.tick(FPS)
@@ -159,9 +160,13 @@ def main():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 start = True
+        if ball.rect.bottom >= HEIGHT and ball.vec.y < 0:
+            run = False
         controlBall()
         checkHits()
         draw_window()
+    pygame.quit()
+    sys.exit()
 
 
 if __name__ == "__main__":

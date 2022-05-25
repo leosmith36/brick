@@ -35,13 +35,19 @@ def main():
             #self.vec = pygame.math.Vector2.rotate(self.vec,random.uniform(-30,30))
             self.vec = pygame.math.Vector2.rotate(self.vec,-30)
             self.ntime = pygame.time.get_ticks()
+            self.ctime = self.ntime
             self.blit()
         def reflect(self,dir):
-            if dir == "v":
-                self.vec = self.vec.reflect(pygame.math.Vector2(1,0))
-            elif dir == "h":
-                self.vec = self.vec.reflect(pygame.math.Vector2(0,1))
+            if self.ctime - self.ntime < COOLDOWN:
+                pass
+            else:
+                self.ntime = self.ctime
+                if dir == "v":
+                    self.vec = self.vec.reflect(pygame.math.Vector2(1,0))
+                elif dir == "h":
+                    self.vec = self.vec.reflect(pygame.math.Vector2(0,1))
         def blit(self):
+            self.ctime = pygame.time.get_ticks()
             self.rect = pygame.draw.circle(WIN,RED,(self.x,self.y),self.rad)
 
     class Bar():
@@ -109,8 +115,8 @@ def main():
 
         collided = False
         for brick in bricks:
-            ctime = pygame.time.get_ticks()
-            if collided == True or ctime - ball.ntime <= COOLDOWN:
+            #ctime = pygame.time.get_ticks()
+            if collided == True:
                 continue
             if (
                 ball.rect.centerx <= brick.rect.right and 
@@ -155,7 +161,7 @@ def main():
             if collide:
                 brick.hits -= 1
                 collided = True
-                ball.ntime = ctime
+                #ball.ntime = ctime
 
     def controlBall():
         if start:

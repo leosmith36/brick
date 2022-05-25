@@ -62,13 +62,13 @@ def main():
             self.rect = pygame.draw.rect(WIN,self.color,pygame.Rect((self.x,self.y),self.size))
 
     def checkHits():
-        ctime = pygame.time.get_ticks()
         if (ball.rect.left <= 0 and ball.vec.x > 0) or (ball.rect.right >= WIDTH and ball.vec.x < 0):
             ball.reflect("v")
         elif ball.rect.top <= 0 and ball.vec.y > 0:
             ball.reflect("h")
         elif (
-            ball.rect.bottom > bar.rect.top and 
+            ball.rect.bottom >= bar.rect.top and
+            ball.rect.bottom <= bar.rect.bottom and
             ball.rect.right >= bar.rect.left and 
             ball.rect.left <= bar.rect.right and
             ball.vec.y < 0
@@ -78,7 +78,7 @@ def main():
             ball.rect.bottom >= bar.rect.top and
             ball.rect.top <= bar.rect.bottom and
             ball.rect.right >= bar.rect.left and
-            #ball.rect.left > bar.rect.centerx and
+            ball.vec.y < 0 and
             ball.vec.x < 0
         ):
             ball.reflect("v")
@@ -86,41 +86,41 @@ def main():
             ball.rect.bottom >= bar.rect.top and
             ball.rect.top <= bar.rect.bottom and
             ball.rect.left <= bar.rect.right and
-            #ball.rect.right < bar.rect.centerx and 
+            ball.vec.y < 0 and 
             ball.vec.x > 0
         ):
             ball.reflect("v")
 
         for brick in bricks:
             if (
-                ball.x <= brick.x + BRICK_WIDTH and 
-                ball.x >= brick.x and
-                ball.y <= brick.y + BRICK_HEIGHT + ball.rad and 
-                ball.y > brick.y and
+                ball.rect.left <= brick.rect.right and 
+                ball.rect.right >= brick.rect.left and
+                ball.rect.top <= brick.rect.bottom and 
+                ball.rect.top >= brick.rect.top and
                 ball.vec.y > 0
             ):
                 ball.reflect("h")
             elif (
-                ball.x <= brick.x + BRICK_WIDTH and 
-                ball.x >= brick.x and
-                ball.y >= brick.y - ball.rad and 
-                ball.y < brick.y + BRICK_HEIGHT and
+                ball.rect.left <= brick.rect.right and 
+                ball.rect.right >= brick.rect.left and
+                ball.rect.bottom >= brick.rect.top and 
+                ball.rect.bottom <= brick.rect.bottom and
                 ball.vec.y < 0
             ):
                 ball.reflect("h")
             elif (
-                ball.x >= brick.x - ball.rad and
-                ball.x < brick.x + BRICK_WIDTH and
-                ball.y >= brick.y and
-                ball.y <= brick.y + BRICK_HEIGHT and
+                ball.rect.left <= brick.rect.right and
+                ball.rect.left >= brick.rect.left and
+                ball.rect.top <= brick.rect.bottom and
+                ball.rect.bottom >= brick.rect.top and
                 ball.vec.x < 0
             ):
                 ball.reflect("v")
             elif (
-                ball.x <= brick.x + ball.rad + BRICK_WIDTH and
-                ball.x > brick.x and
-                ball.y >= brick.y and
-                ball.y <= brick.y + BRICK_HEIGHT and
+                ball.rect.right >= brick.rect.left and
+                ball.rect.right <= brick.rect.right and
+                ball.rect.bottom >= brick.rect.top and
+                ball.rect.top <= brick.rect.bottom and
                 ball.vec.x > 0
             ):
                 ball.reflect("v")
@@ -144,7 +144,7 @@ def main():
     run = True
     start = False
     clock = pygame.time.Clock()
-    ball = Ball(BALL_SPEED,450,400,BALL_RAD)
+    ball = Ball(BALL_SPEED,450,399,BALL_RAD)
     bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)
     bricks = [Brick(100,100,GREEN,3)]
 

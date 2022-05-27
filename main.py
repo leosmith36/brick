@@ -34,10 +34,35 @@ PLAY_H = 50
 PLAY_TEXT = pygame.font.SysFont("airial",50)
 PLAY = pygame.Rect(WIDTH//2 - PLAY_W//2,HEIGHT//2 - PLAY_H//2,PLAY_W,PLAY_H)
 
-L1 = (["g"*8] + ["b"])*3
-L2 = (["g"*8]*2 + ["b"])*2
+LEVEL_TEXT = pygame.font.SysFont("airial",50)
 
-LEVELS = [L1,L2]
+L0 = [
+    "gggggggg",
+    "",
+    "gggggggg",
+    "",
+    "gggggggg",
+    "",
+    "gggggggg",
+]
+L1 = [
+    "gggggggg",
+    "gggggggg",
+    "",
+    "",
+    "gggggggg",
+    "gggggggg"
+]
+L2 = [
+    "gggggggg",
+    "gbbbbbbg",
+    "gbggggbg",
+    "gbggggbg",
+    "gbbbbbbg",
+    "gggggggg"
+]
+
+LEVELS = [L0,L1,L2]
 
 def main():
 
@@ -94,10 +119,9 @@ def main():
     start = False
     level = 0
     clock = pygame.time.Clock()
-    ball = Ball(BALL_SPEED,450,399,BALL_RAD)
+    ball = Ball(BALL_SPEED,450,500,BALL_RAD)
     bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)  
     bricks = []
-    
 
     def makeLevel(level):
         key = 0
@@ -202,14 +226,16 @@ def main():
             bar.x = mouse_pos[0] - BAR_WIDTH/2
         if not start:
             ball.x = bar.x + BAR_WIDTH/2
+            ball.y = bar.y - ball.rad - 1
+            level_display = LEVEL_TEXT.render("Level " + str(level),1,BLACK)
+            WIN.blit(level_display,
+                (WIDTH//2 - level_display.get_width()//2,
+                HEIGHT//2 - level_display.get_height()//2)
+            )
         bar.blit()
         for brick in bricks:
             brick.blit()
-                    
-
         pygame.display.update()
-
-    
 
     while run:
         clock.tick(FPS)
@@ -230,6 +256,7 @@ def main():
         if len(bricks) == 0 and init:
             makeLevel(level)
             level +=1
+            start = False
         if not init:
             draw_start()
         else:
@@ -238,7 +265,6 @@ def main():
             draw_window()
     pygame.quit()
     sys.exit()
-
 
 if __name__ == "__main__":
     main()

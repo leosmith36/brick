@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+from objects import *
 pygame.font.init()
 
 WIDTH,HEIGHT = 600,600
@@ -66,22 +67,7 @@ LEVELS = [L0,L1,L2]
 
 def main():
 
-    class Ball():
-        def __init__(self,spd,x,y,rad):
-            self.spd = spd
-            self.rad = rad
-            self.y = y
-            self.x = x
-            self.vec = pygame.math.Vector2(0,self.spd)
-            self.vec = pygame.math.Vector2.rotate(self.vec,random.uniform(-30,30))
-            self.blit()
-        def reflect(self,dir):
-            if dir == "v":
-                self.vec = self.vec.reflect(pygame.math.Vector2(1,0))
-            elif dir == "h":
-                self.vec = self.vec.reflect(pygame.math.Vector2(0,1))
-        def blit(self):
-            self.rect = pygame.draw.circle(WIN,RED,(self.x,self.y),self.rad)
+        
 
     class Bar():
         def __init__(self,x,y):
@@ -119,7 +105,7 @@ def main():
     start = False
     level = 0
     clock = pygame.time.Clock()
-    ball = Ball(BALL_SPEED,450,500,BALL_RAD)
+    ball = Ball(WIN,450,500,BALL_SPEED,BALL_RAD)
     bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)  
     bricks = []
 

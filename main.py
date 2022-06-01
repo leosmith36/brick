@@ -20,11 +20,6 @@ BLACK = (0,0,0)
 BALL_SPEED = 7
 BALL_RAD = 10
 
-BAR_WIDTH = 100
-BAR_HEIGHT = 20
-
-BRICK_WIDTH = 50
-BRICK_HEIGHT = 25
 
 COOLDOWN = 100
 
@@ -67,46 +62,13 @@ LEVELS = [L0,L1,L2]
 
 def main():
 
-        
+    
 
-    class Bar():
-        def __init__(self,x,y):
-            self.x = x
-            self.y = y
-            self.size = (BAR_WIDTH,BAR_HEIGHT)
-            self.blit()
-        def blit(self):
-            self.rect = pygame.draw.rect(WIN,BLUE,pygame.Rect((self.x,self.y),self.size))
-
-    class Brick():
-        def __init__(self,x,y,color,hits,key):
-            self.color = color
-            self.x = x
-            self.y = y
-            self.size = (BRICK_WIDTH,BRICK_HEIGHT)
-            self.hits = hits
-            self.key = key
-            self.ntime = pygame.time.get_ticks()
-            self.blit()
-        def blit(self):
-            self.ctime = pygame.time.get_ticks()
-            if self.hits <= 0:
-                for brick in bricks:
-                    if brick.key == self.key:
-                        bricks.remove(brick)
-            elif self.hits == 2:
-                self.color = GREEN
-            elif self.hits == 1:
-                self.color = LGREEN
-            self.rect = pygame.draw.rect(WIN,self.color,pygame.Rect((self.x,self.y),self.size))
-
-    init = False
-    run = True
-    start = False
-    level = 0
+    game = Game()
     clock = pygame.time.Clock()
     ball = Ball(WIN,450,500,BALL_SPEED,BALL_RAD)
-    bar = Bar(ball.x - BAR_WIDTH/2,ball.y + ball.rad)  
+    bar = Bar(WIN,0,ball.y + ball.rad)
+    bar.setX(ball.x - bar.getWidth()//2)
     bricks = []
 
     def makeLevel(level):
@@ -114,14 +76,14 @@ def main():
         y = 50
         for item in LEVELS[level]:
             length = len(item)
-            total_length = BRICK_WIDTH*length + 5*(length-1)
+            total_length = Brick.width*length + 5*(length-1)
             x = (WIDTH - total_length)//2
             for letter in item:
                 if letter == "g":
-                    bricks.append(Brick(x,y,DGREEN,3,key))
-                x += BRICK_WIDTH + 5
+                    bricks.append(Brick(WIN,x,y,DGREEN,3,key))
+                x += Brick.width + 5
                 key += 1
-            y += BRICK_HEIGHT + 5
+            y += Brick.getHeight() + 5
 
     def checkHits():
         collide = False
@@ -191,7 +153,7 @@ def main():
                 brick.ntime = pygame.time.get_ticks()
 
     def controlBall():
-        if start:
+        if game.start:
             ball.x -= ball.vec.x
             ball.y -= ball.vec.y
 
@@ -208,10 +170,10 @@ def main():
     def draw_window():
         WIN.fill(WHITE)
         ball.blit()
-        if mouse_pos[0] > BAR_WIDTH/2 and mouse_pos[0] < WIDTH - BAR_WIDTH/2:
-            bar.x = mouse_pos[0] - BAR_WIDTH/2
-        if not start:
-            ball.x = bar.x + BAR_WIDTH/2
+        if mouse_pos[0] > bar.getWidth()/2 and mouse_pos[0] < WIDTH - bar.getWidth()/2:
+            bar.x = mouse_pos[0] - bar.getWidth()/2
+        if not game.start:
+            ball.x = bar.x + bar.getWidth()/2
             ball.y = bar.y - ball.rad - 1
             level_display = LEVEL_TEXT.render("Level " + str(level),1,BLACK)
             WIN.blit(level_display,
@@ -223,27 +185,25 @@ def main():
             brick.blit()
         pygame.display.update()
 
-    while run:
+    while game.run:
         clock.tick(FPS)
         events = pygame.event.get()
         mouse_pos = pygame.mouse.get_pos()
         for event in events:
             if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-                sys.exit()
+                game.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if init:
-                    start = True
+                if game.init:
+                    game.start = True
                 elif PLAY.collidepoint(mouse_pos):
-                    init = True
+                    game.init = True
         if ball.rect.bottom >= HEIGHT and ball.vec.y < 0:
-            run = False
-        if len(bricks) == 0 and init:
-            makeLevel(level)
+            game.run = False
+        if len(bricks) == 0 and game.init:
+            makeLevel(game.level)
             level +=1
-            start = False
-        if not init:
+            game.start = False
+        if not game.init:
             draw_start()
         else:
             controlBall()

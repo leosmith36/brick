@@ -49,23 +49,26 @@ class Bar(GameObject):
 class Brick(GameObject):
     width = 50
     height = 25
-    def __init__(self,win,x,y,color,hits,key):
+    def __init__(self,win,x,y,color,hits,key,game):
         self.color = color
         self.hits = hits
         self.key = key
         self.ntime = pygame.time.get_ticks()
+        self.game = game
         super().__init__(win,x,y)
-    def blit(self,bricks):
+    def blit(self):
+        bricks = self.game.getBricks()
         self.ctime = pygame.time.get_ticks()
         if self.hits <= 0:
             for brick in bricks:
                 if brick.key == self.key:
                     bricks.remove(brick)
+                    self.game.newBricks(bricks)
         elif self.hits == 2:
             self.color = (0,255,0)
         elif self.hits == 1:
             self.color = (144,238,144)
-        self.rect = pygame.draw.rect(self.win,self.color,pygame.Rect((self.x,self.y),self.size))
+        self.rect = pygame.draw.rect(self.win,self.color,pygame.Rect((self.x,self.y),(self.width,self.height)))
 
 class Game():
     def __init__(self):

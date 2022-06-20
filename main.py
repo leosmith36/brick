@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 from objects import *
+
 pygame.font.init()
 
 WIDTH,HEIGHT = 600,600
@@ -62,13 +63,11 @@ LEVELS = [L0,L1,L2]
 
 def main():
 
-    
-
     game = Game()
     clock = pygame.time.Clock()
     ball = Ball(WIN,450,500,BALL_SPEED,BALL_RAD)
-    bar = Bar(WIN,0,ball.y + ball.rad)
-    bar.setX(ball.x - bar.getWidth()//2)
+    bar = Bar(WIN,ball.x - Bar.width//2,ball.y + ball.rad)
+
 
     def makeLevel(level):
         key = 0
@@ -173,10 +172,10 @@ def main():
     def draw_window():
         WIN.fill(WHITE)
         ball.blit()
-        if mouse_pos[0] > bar.getWidth()/2 and mouse_pos[0] < WIDTH - bar.getWidth()/2:
-            bar.x = mouse_pos[0] - bar.getWidth()/2
+        if mouse_pos[0] > Bar.width/2 and mouse_pos[0] < WIDTH - Bar.width/2:
+            bar.x = mouse_pos[0] - Bar.width/2
         if not game.start:
-            ball.x = bar.x + bar.getWidth()/2
+            ball.x = bar.x + Bar.width/2
             ball.y = bar.y - ball.rad - 1
             level_display = LEVEL_TEXT.render("Level " + str(game.level),1,BLACK)
             WIN.blit(level_display,

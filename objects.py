@@ -35,16 +35,13 @@ class Ball(GameObject):
         self.rect = pygame.draw.circle(self.win,(255,0,0),(self.x,self.y),self.rad)
 
 class Bar(GameObject):
-        def __init__(self,win,x,y):
-            self.width = 100
-            self.height = 20
-            super().__init__(win,x,y)
-        def blit(self):
-            self.rect = pygame.draw.rect(self.win,(0,0,255),pygame.Rect((self.x,self.y),(self.width,self.height)))
-        def getWidth(self):
-            return self.width
-        def getHeight(self):
-            return self.height
+    width = 100
+    height = 20
+    def __init__(self,win,x,y):
+        super().__init__(win,x,y)
+    def blit(self):
+        self.rect = pygame.draw.rect(self.win,(0,0,255),pygame.Rect((self.x,self.y),(Bar.width,Bar.height)))
+
 
 class Brick(GameObject):
     width = 50

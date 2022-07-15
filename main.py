@@ -13,8 +13,8 @@ def main():
             if event.type == pygame.QUIT or game.exited:
                 active = False
                 break
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                game.click()
+            if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
+                game.click(event)
         game.update()
     pygame.quit()
     sys.exit()

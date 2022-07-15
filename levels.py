@@ -44,10 +44,10 @@ class Levels():
 
     LEVELS = [LEVEL_1, LEVEL_2]
     BRICKS = {
-        "0" : [1, Color.RED.value, None],
-        "1" : [2, Color.GREEN.value, None],
-        "2" : [3, Color.BLUE.value, None],
-        "3" : [1, Color.BLACK.value, lambda scene, x, y : Item(scene, x, y, Color.RED.value, lambda : scene.long_bar(), 2, center = True), 0.5]
+        "0" : [1, Color.RED, None],
+        "1" : [2, Color.GREEN, None],
+        "2" : [3, Color.BLUE, None],
+        "3" : [1, Color.BLACK, lambda scene, x, y : Item(scene, x, y, Color.RED, lambda : scene.long_bar(), 2, center = True), 0.5]
     }
 
     @classmethod

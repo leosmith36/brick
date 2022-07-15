@@ -9,7 +9,7 @@ from colors import Color
 class Fail(Scene):
     def __init__(self, game):
         super().__init__(game)
-        self.fail_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK.value, "GAME OVER", Font.FONT1.value, center = True)
+        self.fail_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "GAME OVER", Font.FONT1, center = True)
         self.objects = [self.fail_text]
         self.time = pygame.time.get_ticks()
 

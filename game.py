@@ -21,8 +21,8 @@ class Game():
         pygame.display.update()
         self.clock.tick(Game.FPS)
 
-    def click(self):
-        self.scene.click()
+    def click(self, event):
+        self.scene.click(event)
 
     def change_scene(self, new_scene):
         self.scene = new_scene

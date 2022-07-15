@@ -14,7 +14,7 @@ class Brick (Object):
         self.broken = False
         self.item = item
         self.chance = chance
-    def update(self):
+    def tick(self):
         if self.hits >= self.max_hits:
             self.remove()
             if self.item and random.random() < self.chance:

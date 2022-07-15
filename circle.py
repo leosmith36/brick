@@ -11,6 +11,8 @@ class Circle(Object):
         self.surface = pygame.Surface((2 * self.rad_0, 2 * self.rad_0), pygame.SRCALPHA)
         pygame.draw.circle(self.surface, self.color, (self.rad_0, self.rad_0), self.rad)
         win.blit(self.surface, self.rect)
+    def tick(self):
+        pass
     @property
     def rad(self):
         return self._rad

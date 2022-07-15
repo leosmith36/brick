@@ -9,7 +9,6 @@ class Object(ABC):
         self._w = w
         self._h = h
         self.surface = pygame.Surface((w, h), pygame.SRCALPHA)
-        self.effects = []
 
         if center:
             self.centerx = x
@@ -17,24 +16,29 @@ class Object(ABC):
         else:
             self.x = x
             self.y = y
-            
+       
+        self.effects = []
         self._rect = self.surface.get_rect(center = self.center)
         self.image = image
-        self.color = color
-        self.removed = False
+        self.color = color.value
+        self.color_key = color
+        self._removed = False
         self._scene = scene
+    
     @abstractmethod
-    def update(self):
+    def tick(self):
         pass
 
-    def render(self, win):
+    def update(self):
         new_effects = []
         for effect in self.effects:
             effect.update()
             if not effect.removed:
                 new_effects.append(effect)
         self.effects = new_effects
-        
+        self.tick()
+
+    def render(self, win):
         self.surface.fill(self.color)
         win.blit(self.surface, self.rect)
         if self.image:
@@ -119,31 +123,29 @@ class Object(ABC):
     @property
     def removed(self):
         return self._removed
-
-    @removed.setter
-    def removed(self, removed):
-        self._removed = removed
     
     def remove(self):
-        self.removed = True
+        self._removed = True
 
     @property
     def scene(self):
         return self._scene
 
     class Effect():
-        def __init__(self, parent, effect, reset, max_time):
+        def __init__(self, parent, effect, reset, max_frames):
             self.time = pygame.time.get_ticks()
             self.reset = reset
-            self.max_time = max_time
+            self.max_frames = max_frames
+            self.frames = 0
             self.parent = parent
             self.parent.add_effect(self)
-            self.removed = False
+            self._removed = False
             effect(self.parent)
+            
         def update(self):
-            newtime = pygame.time.get_ticks()
-            diff = (newtime - self.time) / 1000
-            if diff >= self.max_time:
+            self.frames += 1
+            diff = self.max_frames - self.frames
+            if diff <= 0:
                 self.reset(self.parent)
                 self.remove()
 
@@ -151,12 +153,8 @@ class Object(ABC):
         def removed(self):
             return self._removed
 
-        @removed.setter
-        def removed(self, removed):
-            self._removed = removed
-
         def remove(self):
-            self.removed = True
+            self._removed = True
 
 
     def add_effect(self, effect):

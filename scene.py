@@ -1,4 +1,5 @@
 from abc import ABC
+import pygame
 
 from objects import Button
 
@@ -8,6 +9,7 @@ class Scene(ABC):
         self.game = game
         self.new_objects = []
         self.del_objects = []
+        self.bindings = []
 
     @property
     def objects(self):
@@ -32,13 +34,34 @@ class Scene(ABC):
         for object in self.objects:
             object.render(win)
 
-    def click(self):
+    def click(self, event):
         for object in self.objects:
             if isinstance(object, Button):
-                object.click()
+                object.click(event)
+        for binding in self.bindings:
+            binding.check(event)
 
     def add_object(self, object):
         self.new_objects.append(object)
 
     def remove_object(self, object):
         self.del_objects.append(object)
+
+    def add_binding(self, binding):
+        self.bindings.append(binding)
+
+    class Binding:
+        def __init__(self, parent, type, function, key = None):
+            self.parent = parent
+            self.type = type
+            self.key = key
+            self.parent.add_binding(self)
+            self.function = function
+        def check(self, event):
+            if event.type == self.type:
+                if self.key:
+                    if self.key == event.key:
+                        self.function()
+                else:
+                    self.function()
+

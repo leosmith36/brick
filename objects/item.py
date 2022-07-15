@@ -8,8 +8,8 @@ class Item(Object):
         self.function = function
         self.speed = speed
         super().__init__(scene, x + Brick.WIDTH // 2, y + Brick.HEIGHT // 2, self.WIDTH, self.HEIGHT, color, center, image)
-    def update(self):
+    def tick(self):
         self.y += self.speed
     def activate(self):
         self.function()
-        self.removed = True
+        self.remove()

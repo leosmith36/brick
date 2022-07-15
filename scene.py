@@ -5,11 +5,12 @@ from objects import Button
 
 class Scene(ABC):
 
-    def __init__(self, game):
+    def __init__(self, game, background):
         self.game = game
         self.new_objects = []
         self.del_objects = []
         self.bindings = []
+        self.background = background.value
 
     @property
     def objects(self):
@@ -31,6 +32,7 @@ class Scene(ABC):
         
 
     def render(self, win):
+        win.fill(self.background)
         for object in self.objects:
             object.render(win)
 

@@ -3,15 +3,15 @@ import pygame
 from scene import Scene
 from objects import Text
 from window import Window
-from fonts import Font
 from colors import Color
+from fonts import Font
 
-class Fail(Scene):
+class Win(Scene):
     def __init__(self, game):
-        super().__init__(game, Color.WHITE)
-        self.fail_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "GAME OVER", Font.FONT1, center = True)
-        self.objects = [self.fail_text]
+        win_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "WINNER", Font.FONT1, center = True)
+        self.objects = [win_text]
         self.time = pygame.time.get_ticks()
+        super().__init__(game, Color.WHITE)
 
     def update(self):
         newtime = pygame.time.get_ticks()
@@ -19,5 +19,3 @@ class Fail(Scene):
         if diff >= 3:
             self.game.exit()
         super().update()
-
-    

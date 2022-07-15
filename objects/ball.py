@@ -12,7 +12,7 @@ from .trail import Trail
 class Ball (Circle):
     RAD = 10
     SPEED = 5
-    COLOR = Color.GREEN
+    COLOR = Color.ORANGE
     def __init__(self, scene):
         self.locked = True
         super().__init__(scene, Window.WIDTH // 2, Bar.START_Y - self.RAD, self.RAD, self.COLOR)

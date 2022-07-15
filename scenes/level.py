@@ -3,16 +3,15 @@ import pygame
 from scene import Scene
 from levels import Levels
 from colors import Color
-from objects import Bar, Ball, Brick, Trail, Text, Item
+from objects import Bar, Ball, Brick, Text, Item
 from window import Window
-from utils import collides_top, collides_bottom, collides_right, collides_left
 from fonts import Font
 from .fail import Fail
 
 class Level(Scene):
 
     def __init__(self, game, level):
-        super().__init__(game)
+        super().__init__(game, Color.WHITE)
         self.level = level
         self.bar = Bar(self)
         self.ball = Ball(self)
@@ -30,17 +29,8 @@ class Level(Scene):
             self.check_collisions()
             super().update()
 
-
-    def render(self, win):
-        win.fill(Color.WHITE.value)
-        super().render(win)
-
     def fail(self):
         self.game.change_scene(Fail(self.game))
-
-    def click(self, event):
-        # self.start()
-        super().click(event)
 
     def start(self):
         if not self.started:

@@ -12,8 +12,4 @@ class Start(Scene):
         self.objects = [
             Button(self, Window.WIDTH // 2, Window.HEIGHT // 2, 200, 50, Color.RED, lambda : game.next_level(), "PLAY", Color.BLACK, Font.FONT1, center = True)
         ]
-        super().__init__(game)
-
-    def render(self, win):
-        win.fill(Color.WHITE.value)
-        super().render(win)
+        super().__init__(game, Color.WHITE)

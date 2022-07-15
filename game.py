@@ -1,7 +1,8 @@
 import pygame
 
 from window import Window
-from scenes import Start, Level
+from scenes import Start, Level, Win
+from levels import Levels
 
 class Game():
 
@@ -29,7 +30,10 @@ class Game():
 
     def next_level(self):
         self.level += 1
-        self.change_scene(Level(self, self.level))
+        if self.level <= len(Levels.LEVELS):
+            self.change_scene(Level(self, self.level))
+        else:
+            self.change_scene(Win(self))
     
     @property
     def level(self):

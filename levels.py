@@ -14,16 +14,16 @@ class Levels():
     LEVEL_1 = [
         "",
         "",
-        "0000000000",
+        "1"*10,
         "",
         "",
-        "0000000000",
+        "2"*10,
         "",
         "",
-        "0000000000",
+        "1"*10,
         "",
         "",
-        "1111331111"
+        "2"*10
     ]
 
     LEVEL_2 = [
@@ -32,22 +32,22 @@ class Levels():
         "",
         "",
         "",
-        "0000000000",
-        "1111221111",
-        "1122222211",
-        "1111221111",
-        "0000000000"
+        "0"*10,
+        "1"*10,
+        "1"*4 + "3"*2 + "1"*4,
+        "1"*10,
+        "0"*10
 
     ]
 
 
-
+    # LEVELS = [LEVEL_0]
     LEVELS = [LEVEL_1, LEVEL_2]
     BRICKS = {
         "0" : [1, Color.RED, None],
         "1" : [2, Color.GREEN, None],
         "2" : [3, Color.BLUE, None],
-        "3" : [1, Color.BLACK, lambda scene, x, y : Item(scene, x, y, Color.RED, lambda : scene.long_bar(), 2, center = True), 0.5]
+        "3" : [1, Color.RED, lambda scene, x, y : Item(scene, x, y, Color.YELLOW, lambda : scene.long_bar(), 2, center = True), 0.5]
     }
 
     @classmethod

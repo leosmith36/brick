@@ -8,10 +8,11 @@ from fonts import Font
 
 class Win(Scene):
     def __init__(self, game):
-        win_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "WINNER", Font.FONT1, center = True)
-        self.objects = [win_text]
-        self.time = pygame.time.get_ticks()
         super().__init__(game, Color.WHITE)
+        win_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "WINNER", Font.FONT1, center = True)
+        self.objects.append(win_text)
+        self.time = pygame.time.get_ticks()
+        
 
     def update(self):
         newtime = pygame.time.get_ticks()

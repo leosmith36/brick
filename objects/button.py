@@ -14,7 +14,7 @@ class Button(Object):
     def hovering(self):
         mouse_pos = pygame.mouse.get_pos()
         return self.rect.collidepoint(mouse_pos)
-    def click(self, event):
+    def trigger(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.hovering():
                 self.activate()

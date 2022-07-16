@@ -1,6 +1,7 @@
 import pygame
-
 from abc import ABC, abstractmethod
+
+from window import Window
 
 
 class Object(ABC):

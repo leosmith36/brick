@@ -11,12 +11,15 @@ from .fail import Fail
 class Level(Scene):
 
     def __init__(self, game, level):
-        super().__init__(game, Color.WHITE)
+        new_level, background = Levels.make_level(level, self)
+        super().__init__(game, Color.WHITE, image = background)
         self.level = level
         self.bar = Bar(self)
         self.ball = Ball(self)
         self.level_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, f"Level {self.level}", Font.FONT1, center = True)
-        self.objects = Levels.make_level(level, self) + [self.bar, self.ball, self.level_text]
+        
+        self.objects.extend(new_level)
+        self.objects.extend([self.bar, self.ball, self.level_text])
         self.started = False
         self.Binding(self, pygame.MOUSEBUTTONDOWN, lambda: self.start())
         self.Binding(self, pygame.KEYDOWN, lambda : self.pause(), key = pygame.K_ESCAPE)

@@ -1,7 +1,8 @@
 import pygame
+import os
 
 from window import Window
-from scenes import Start, Level, Win
+from scenes import Start, Level, Win, Choose
 from levels import Levels
 
 class Game():
@@ -22,8 +23,8 @@ class Game():
         pygame.display.update()
         self.clock.tick(Game.FPS)
 
-    def click(self, event):
-        self.scene.click(event)
+    def trigger(self, event):
+        self.scene.trigger(event)
 
     def change_scene(self, new_scene):
         self.scene = new_scene
@@ -34,6 +35,9 @@ class Game():
             self.change_scene(Level(self, self.level))
         else:
             self.change_scene(Win(self))
+
+    def choose_level(self):
+        self.change_scene(Choose(self))
     
     @property
     def level(self):

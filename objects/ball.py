@@ -11,7 +11,7 @@ from .trail import Trail
 
 class Ball (Circle):
     RAD = 10
-    SPEED = 5
+    SPEED = 8
     COLOR = Color.ORANGE
     def __init__(self, scene):
         self.locked = True
@@ -63,3 +63,4 @@ class Ball (Circle):
             self.reflect_vertical()
         elif self.rect.top >= Window.HEIGHT:
             self.scene.fail()
+            self.remove()

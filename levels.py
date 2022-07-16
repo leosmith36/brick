@@ -42,10 +42,10 @@ class Levels():
 
 
     # LEVELS = [LEVEL_0]
-    LEVELS = {
-        "stone.png" : LEVEL_0,
-        "stone.png" : LEVEL_1
-    }
+    LEVEL_LIST = [
+        [LEVEL_0, "stone.png"],
+        [LEVEL_2, "stone.png"]
+    ]
     BRICKS = {
         "0" : [1, Color.RED, None],
         "1" : [2, Color.GREEN, None],
@@ -55,10 +55,8 @@ class Levels():
 
     @classmethod
     def make_level(cls, level, scene):
-        images = list(cls.LEVELS.keys())
-        collection = list(cls.LEVELS.values())
-        new_level = collection[level - 1]
-        image = os.path.join("images",images[level - 1])
+        new_level = cls.LEVEL_LIST[level][0]
+        image = os.path.join("images",cls.LEVEL_LIST[level][1])
         vert_spacing = 1
         horiz_spacing = 1
         y = 0

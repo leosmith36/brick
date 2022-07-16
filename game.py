@@ -2,7 +2,7 @@ import pygame
 import os
 
 from window import Window
-from scenes import Start, Level, Win, Choose
+from scenes import Start, Level, Win, Choose, Fail
 from levels import Levels
 
 class Game():
@@ -14,7 +14,7 @@ class Game():
         self.win = self.window.win
         self.scene = Start(self)
         self.clock = pygame.time.Clock()
-        self.level = 0
+        self.level = -1
         self._exited = False
 
     def update(self):
@@ -31,10 +31,13 @@ class Game():
 
     def next_level(self):
         self.level += 1
-        if self.level <= len(Levels.LEVELS):
-            self.change_scene(Level(self, self.level))
+        if self.level <= len(Levels.LEVEL_LIST):
+            self.load_level(self.level)
         else:
             self.change_scene(Win(self))
+
+    def load_level(self, level):
+        self.change_scene(Level(self, level))
 
     def choose_level(self):
         self.change_scene(Choose(self))
@@ -53,3 +56,6 @@ class Game():
     
     def exit(self):
         self._exited = True
+
+    def fail(self):
+        self.change_scene(Fail(self))

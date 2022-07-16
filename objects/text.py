@@ -19,3 +19,9 @@ class Text(Object):
                 self.removed = True
     def render(self, win):
         win.blit(self.text_surface, (self.x,self.y))
+    @property
+    def text(self):
+        return self._text
+    @text.setter
+    def text(self, text):
+        self._text = text

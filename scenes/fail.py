@@ -17,7 +17,7 @@ class Fail(Scene):
         newtime = pygame.time.get_ticks()
         diff = (newtime - self.time) / 1000
         if diff >= 3:
-            self.game.exit()
+            self.game.restart()
         super().update()
 
     

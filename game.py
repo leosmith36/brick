@@ -32,15 +32,19 @@ class Game():
     def next_level(self):
         self.level += 1
         if self.level <= len(Levels.LEVEL_LIST):
-            self.load_level(self.level)
+            self.load_level(self.level, True)
         else:
             self.change_scene(Win(self))
 
-    def load_level(self, level):
-        self.change_scene(Level(self, level))
+    def load_level(self, level, consecutive):
+        self.change_scene(Level(self, level, consecutive))
 
     def choose_level(self):
         self.change_scene(Choose(self))
+
+    def restart(self):
+        self.change_scene(Start(self))
+        self.level = -1
     
     @property
     def level(self):

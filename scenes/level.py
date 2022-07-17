@@ -10,7 +10,7 @@ from .fail import Fail
 
 class Level(Scene):
 
-    def __init__(self, game, level):
+    def __init__(self, game, level, consecutive):
 
         self.bricks, background = Levels.make_level(level, self)
 
@@ -29,7 +29,7 @@ class Level(Scene):
 
         self.started = False
         self.paused = False
-        
+        self.consecutive = consecutive
 
         self.Binding(self, pygame.MOUSEBUTTONDOWN, lambda: self.start())
         self.Binding(self, pygame.KEYDOWN, lambda : self.pause(), key = pygame.K_ESCAPE)
@@ -75,6 +75,13 @@ class Level(Scene):
         self.add_object(self.ball)
         self.add_object(self.lives_text)
 
+    def win(self):
+        if self.consecutive:
+            self.game.next_level()
+        else:
+            self.game.choose_level()
+
+
     def check_collisions(self):
         new_bricks = []
         for object in self.objects:
@@ -88,7 +95,7 @@ class Level(Scene):
                     object.activate()
         self.bricks = new_bricks
         if len(new_bricks) == 0 and self.started:
-            self.game.next_level()
+            self.win()
         
         self.ball.check_bar(self.bar)
 

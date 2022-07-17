@@ -21,7 +21,7 @@ class Level(Scene):
         self.ball = Ball(self)
         self.level_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, f"Level {self.level + 1}", Font.FONT1, center = True)
         
-        self.lives_text = Text(self, 10, 10, Color.BLACK, "Lives: 3", Font.FONT1)
+        self.lives_text = None
         self.lives = 3
 
         self.objects.extend(self.bricks)
@@ -44,7 +44,7 @@ class Level(Scene):
             super().update()
 
     def fail(self):
-        if self.lives <= 0:
+        if self.lives <= 1:
             self.game.fail()
         else:
             self.reload()
@@ -102,6 +102,6 @@ class Level(Scene):
     @lives.setter
     def lives(self, lives):
         self._lives = lives
-        self.lives_text = Text(self, 10, 10, Color.BLACK, f"Lives: {lives}", Font.FONT1)
+        self.lives_text = Text(self, Window.WIDTH - 75, 10, Color.BLACK, f"Lives: {lives}", Font.FONT2)
 
 

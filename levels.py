@@ -43,7 +43,7 @@ class Levels():
 
     # LEVELS = [LEVEL_0]
     LEVEL_LIST = [
-        [LEVEL_0, "stone.png"],
+        [LEVEL_1, "stone.png"],
         [LEVEL_2, "stone.png"]
     ]
     BRICKS = {

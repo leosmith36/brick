@@ -1,6 +1,7 @@
 import pygame
 import math
 import random
+import os
 
 from circle import Circle
 from colors import Color
@@ -18,6 +19,7 @@ class Ball (Circle):
         super().__init__(scene, Window.WIDTH // 2, Bar.START_Y - self.RAD, self.RAD, self.COLOR)
         self.vec = pygame.math.Vector2(0,self.SPEED)
         self.speed = self.SPEED
+        self.sound = pygame.mixer.Sound(os.path.join("sounds","hit1.mp3"))
         # self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
     def tick(self):
         if self.locked:
@@ -34,11 +36,14 @@ class Ball (Circle):
             self.scene.add_object(Trail(self.scene, self.centerx, self.centery, self.rad, self.color_key))
     def reflect_vertical(self):
         self.vec.x *= -1
+        self.sound.play()
     def reflect_horizontal(self):
         self.vec.y *= -1
+        self.sound.play()
     def reflect_bar_top(self, bar_x):
         diff = self.centerx - bar_x
         self.vec = pygame.math.Vector2(0,self.speed).rotate_rad(diff / 50)
+        self.sound.play()
     def unlock(self):
         self.locked = False
     def check_collisions(self, object):
@@ -56,6 +61,8 @@ class Ball (Circle):
             self.reflect_vertical()
         elif self.rect.colliderect(object.rect):
             self.reflect_vertical()
+        else:
+            return
     def check_bounds(self):
         if self.rect.top - self.vec.y < 0:
             self.reflect_horizontal()
@@ -64,3 +71,4 @@ class Ball (Circle):
         elif self.rect.top >= Window.HEIGHT:
             self.scene.fail()
             self.remove()
+

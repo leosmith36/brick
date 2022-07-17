@@ -65,7 +65,6 @@ class Level(Scene):
 
     def reload(self):
         self.started = False
-        self.bar = Bar(self)
         self.ball = Ball(self)
         self.lives -= 1
         for object in self.objects:

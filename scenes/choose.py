@@ -19,7 +19,7 @@ class Choose(Scene):
                     200,
                     50,
                     Color.BLUE,
-                    lambda : game.load_level(i, False),
+                    lambda num = i : self.game.change_scene(Level(self.game, num, False)),
                     f"LEVEL {i + 1}",
                     Color.BLACK,
                     Font.FONT1,

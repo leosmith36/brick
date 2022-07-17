@@ -32,6 +32,7 @@ class Scene(ABC):
         self.objects = remaining_objects
         self.objects += self.new_objects
         self.new_objects.clear()
+        self.del_objects.clear()
         
 
     def render(self, win):

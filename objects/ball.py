@@ -12,7 +12,7 @@ from .trail import Trail
 
 class Ball (Circle):
     RAD = 10
-    SPEED = 8
+    SPEED = 4
     COLOR = Color.ORANGE
     def __init__(self, scene):
         self.locked = True
@@ -20,7 +20,9 @@ class Ball (Circle):
         self.vec = pygame.math.Vector2(0,self.SPEED)
         self.speed = self.SPEED
         self.sound = pygame.mixer.Sound(os.path.join("sounds","hit1.mp3"))
+        self.hit_bar = False
         # self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
+        self.vec = self.vec.rotate_rad(math.pi / 3)
     def tick(self):
         if self.locked:
             mouse_pos = pygame.mouse.get_pos()
@@ -53,16 +55,26 @@ class Ball (Circle):
             self.reflect_vertical()
         else:
             return False
+        self.hit_bar = False
         return True
     def check_bar(self, object):
         if collides_bottom(self, object) or collides_top(self, object):
             self.reflect_bar_top(object.centerx)
-        elif collides_left(self, object) or collides_right(self, object):
-            self.reflect_vertical()
-        elif self.rect.colliderect(object.rect):
-            self.reflect_vertical()
+        elif collides_left(self, object) or collides_right(self, object) or self.rect.colliderect(object.rect):
+            if self.hit_bar:
+                if self.centerx < object.centerx:
+                    self.centerx -= 5
+                    self.vec.x += 1
+                    self.vec.scale_to_length(self.speed)
+                if self.centerx > object.centerx:
+                    self.centerx += 5
+                    self.vec.x -= 1
+                    self.vec.scale_to_length(self.speed)
+            else:
+                self.reflect_vertical()
         else:
             return
+        self.hit_bar = True
     def check_bounds(self):
         if self.rect.top - self.vec.y < 0:
             self.reflect_horizontal()
@@ -71,4 +83,7 @@ class Ball (Circle):
         elif self.rect.top >= Window.HEIGHT:
             self.scene.fail()
             self.remove()
+        else:
+            return
+        self.hit_bar = False
 

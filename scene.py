@@ -71,7 +71,7 @@ class Scene(ABC):
             if event.type == self.type:
                 if self.key:
                     if self.key == event.key:
-                        self.function()
+                        self.function(event)
                 else:
-                    self.function()
+                    self.function(event)
 

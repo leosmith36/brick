@@ -31,8 +31,9 @@ class Level(Scene):
         self.paused = False
         self.consecutive = consecutive
 
-        self.Binding(self, pygame.MOUSEBUTTONDOWN, lambda: self.start())
-        self.Binding(self, pygame.KEYDOWN, lambda : self.pause(), key = pygame.K_ESCAPE)
+        self.Binding(self, pygame.MOUSEBUTTONDOWN, lambda event: self.start(event))
+        self.Binding(self, pygame.KEYDOWN, lambda event : self.pause(event), key = pygame.K_ESCAPE)
+        self.Binding(self, pygame.KEYDOWN, lambda event : self.control_bar(event))
 
         self.pause_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "PAUSED", Font.FONT1, center = True)
 
@@ -100,6 +101,9 @@ class Level(Scene):
 
     def long_bar(self):
         self.bar.long_bar()
+
+    def control_bar(self, event):
+        self.bar.control(event)
 
     @property
     def lives(self):

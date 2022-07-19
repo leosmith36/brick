@@ -11,10 +11,10 @@ from .fail import Fail
 class Level(Scene):
 
     def __init__(self, game, level, consecutive):
-
+        super().__init__(game, Color.WHITE)
         self.bricks, background = Levels.make_level(level, self)
-
-        super().__init__(game, Color.WHITE, image = background)
+        self.image = pygame.image.load(background).convert()
+        
 
         self.level = level
         self.bar = Bar(self)
@@ -24,8 +24,8 @@ class Level(Scene):
         self.lives_text = None
         self.lives = 3
 
-        self.objects.extend(self.bricks)
-        self.objects.extend([self.bar, self.ball, self.level_text, self.lives_text])
+        # self.objects.extend(self.bricks)
+        # self.objects.extend([self.bar, self.ball, self.level_text, self.lives_text])
 
         self.started = False
         self.paused = False
@@ -39,9 +39,13 @@ class Level(Scene):
 
     def update(self):
         if not self.paused:
+            self.pause_text.visible = False
             if self.started:
+                self.level_text.visible = False
                 self.check_collisions()
             super().update()
+        else:
+            self.pause_text.visible = True
 
     def fail(self):
         if self.lives <= 1:
@@ -53,15 +57,12 @@ class Level(Scene):
         if not self.started:
             self.started = True
             self.ball.unlock()
-            self.level_text.remove()
 
     def pause(self):
         if self.started and not self.paused:
             self.paused = True
-            self.objects.append(self.pause_text)
         elif self.paused:
             self.paused = False
-            self.remove_object(self.pause_text)
 
     def reload(self):
         self.started = False

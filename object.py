@@ -29,6 +29,7 @@ class Object(ABC):
         self.color_key = color
         self._removed = False
         self._scene = scene
+        self.scene.add_object(self)
     
     @abstractmethod
     def tick(self):

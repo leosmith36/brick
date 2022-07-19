@@ -1,16 +1,25 @@
 import pygame
+import re
 
 from object import Object
 from colors import Color
 
 class Text(Object):
-    def __init__(self, scene, x, y, color, text, font, center = False, timer = None):
-        self.text = text
+    def __init__(self, scene, x, y, color, text, font, center = False, timer = None, value = None):
+        
+        if value and "val" in text:
+            self._value = value
+            self._text = re.sub("val", str(value), text)
+        else:
+            self._value = None
+            self._text = text
+        self.text_0 = text
         self.font = font.value
-        self.text_surface = self.font.render(text, 1, color.value)
+        self.text_surface = self.font.render(self.text, 1, color.value)
         self.time = pygame.time.get_ticks()
         self.timer = timer
         self.visible = True
+
         super().__init__(scene, x, y, self.text_surface.get_width(), self.text_surface.get_height(), Color.CLEAR, center)
     def tick(self):
         if self.timer:
@@ -34,3 +43,11 @@ class Text(Object):
     @visible.setter
     def visible(self, visible):
         self._visible = visible
+    @property
+    def value(self):
+        return self._value
+    @value.setter
+    def value(self, value):
+        self._value = value
+        self.text = re.sub("val", str(value), self.text_0)
+        self.text_surface = self.font.render(self.text, 1, self.color)

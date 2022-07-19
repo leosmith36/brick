@@ -24,10 +24,9 @@ class Object(ABC):
             self.image = pygame.image.load(image).convert_alpha()
         else:
             self.image = None
-        # self.image = image
         self.color = color.value
         self.color_key = color
-        self._removed = False
+        self.removed = False
         self._scene = scene
         self.scene.add_object(self)
     
@@ -128,6 +127,10 @@ class Object(ABC):
     @property
     def removed(self):
         return self._removed
+    
+    @removed.setter
+    def removed(self, removed):
+        self._removed = removed
     
     def remove(self):
         self._removed = True

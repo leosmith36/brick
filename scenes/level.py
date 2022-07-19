@@ -21,8 +21,7 @@ class Level(Scene):
         self.ball = Ball(self)
         self.level_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, f"Level {self.level + 1}", Font.FONT1, center = True)
         
-        self.lives_text = None
-        self.lives = 3
+        self.lives_text = Text(self, Window.WIDTH - 75, 10, Color.BLACK, f"Lives: val", Font.FONT2, value = 3)
 
         # self.objects.extend(self.bricks)
         # self.objects.extend([self.bar, self.ball, self.level_text, self.lives_text])
@@ -68,10 +67,10 @@ class Level(Scene):
         self.started = False
         self.ball = Ball(self)
         self.lives -= 1
-        for object in self.objects:
-            if not isinstance(object, Brick):
-                self.remove_object(object)
-        self.objects.extend([self.bar, self.ball, self.lives_text])
+        # for object in self.objects:
+        #     if not isinstance(object, Brick):
+        #         self.remove_object(object)
+        # self.objects.extend([self.bar, self.ball, self.lives_text])
 
     def win(self):
         if self.consecutive:
@@ -108,12 +107,11 @@ class Level(Scene):
 
     @property
     def lives(self):
-        return self._lives
+        return self.lives_text.value
 
     @lives.setter
     def lives(self, lives):
-        self._lives = lives
-        self.lives_text = Text(self, Window.WIDTH - 75, 10, Color.BLACK, f"Lives: {lives}", Font.FONT2)
+        self.lives_text.value = lives
 
     @property
     def bar(self):

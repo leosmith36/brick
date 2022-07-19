@@ -22,6 +22,7 @@ class Game():
         self.scene.render(self.win)
         pygame.display.update()
         self.clock.tick(Game.FPS)
+        # print(self.clock.get_fps())
 
     def trigger(self, event):
         self.scene.trigger(event)

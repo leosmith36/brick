@@ -20,9 +20,9 @@ class Brick (Object):
             if self.item and random.random() < self.chance:
                 self.scene.add_object(self.item)
         elif self.hits == self.max_hits - 2 and self.hits != 0:
-            self.image = os.path.join("images","brick_blank_crack1.png")
+            self.image = pygame.image.load(os.path.join("images","brick_blank_crack1.png")).convert_alpha()
         elif self.hits == self.max_hits - 1 and self.hits != 0:
-            self.image = os.path.join("images","brick_blank_crack2.png")
+            self.image = pygame.image.load(os.path.join("images","brick_blank_crack2.png")).convert_alpha()
         
     def hit(self):
         self.hits += 1

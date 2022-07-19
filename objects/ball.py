@@ -12,7 +12,7 @@ from .trail import Trail
 
 class Ball (Circle):
     RAD = 10
-    SPEED = 4
+    SPEED = 5
     COLOR = Color.ORANGE
     def __init__(self, scene):
         self.locked = True
@@ -23,10 +23,12 @@ class Ball (Circle):
         self.hit_bar = False
         # self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
         self.vec = self.vec.rotate_rad(math.pi / 3)
+        self.centerx = self.scene.bar.centerx
     def tick(self):
         if self.locked:
-            mouse_pos = pygame.mouse.get_pos()
-            self.centerx = mouse_pos[0]
+            # mouse_pos = pygame.mouse.get_pos()
+            # self.centerx = mouse_pos[0]
+            self.control()
             self.centerx = clamp(self.centerx, Bar.WIDTH // 2, Window.WIDTH - Bar.WIDTH // 2)
         else:
             self.check_bounds()
@@ -48,6 +50,12 @@ class Ball (Circle):
         self.sound.play()
     def unlock(self):
         self.locked = False
+    def control(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.x -= self.scene.bar.speed
+        if keys[pygame.K_RIGHT]:
+            self.x += self.scene.bar.speed
     def check_collisions(self, object):
         if collides_bottom(self, object) or collides_top(self, object):
             self.reflect_horizontal()
@@ -63,13 +71,13 @@ class Ball (Circle):
         elif collides_left(self, object) or collides_right(self, object) or self.rect.colliderect(object.rect):
             if self.hit_bar:
                 if self.centerx < object.centerx:
-                    self.centerx -= 5
-                    self.vec.x += 1
-                    self.vec.scale_to_length(self.speed)
+                    self.x -= self.scene.bar.speed
+                    # self.vec.x += 1
+                    # self.vec.scale_to_length(self.speed)
                 if self.centerx > object.centerx:
-                    self.centerx += 5
-                    self.vec.x -= 1
-                    self.vec.scale_to_length(self.speed)
+                    self.x += self.scene.bar.speed
+                    # self.vec.x -= 1
+                    # self.vec.scale_to_length(self.speed)
             else:
                 self.reflect_vertical()
         else:

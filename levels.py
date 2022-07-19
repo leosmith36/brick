@@ -43,14 +43,14 @@ class Levels():
 
     # LEVELS = [LEVEL_0]
     LEVEL_LIST = [
-        [LEVEL_0, "stone.png"],
+        # [LEVEL_0, "stone.png"],
         [LEVEL_1, "stone.png"],
         [LEVEL_2, "stone.png"]
     ]
     BRICKS = {
         "0" : [1, Color.RED, None],
         "1" : [2, Color.GREEN, None],
-        "2" : [3, Color.BLUE, None],
+        "2" : [3, Color.YELLOW, None],
         "3" : [1, Color.RED, lambda scene, x, y : Item(scene, x, y, Color.YELLOW, lambda : scene.long_bar(), 2, center = True), 0.5]
     }
 

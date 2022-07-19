@@ -31,9 +31,8 @@ class Level(Scene):
         self.paused = False
         self.consecutive = consecutive
 
-        self.Binding(self, pygame.MOUSEBUTTONDOWN, lambda event: self.start(event))
-        self.Binding(self, pygame.KEYDOWN, lambda event : self.pause(event), key = pygame.K_ESCAPE)
-        self.Binding(self, pygame.KEYDOWN, lambda event : self.control_bar(event))
+        self.Binding(self, pygame.KEYDOWN, lambda : self.start(), key = pygame.K_SPACE)
+        self.Binding(self, pygame.KEYDOWN, lambda : self.pause(), key = pygame.K_ESCAPE)
 
         self.pause_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "PAUSED", Font.FONT1, center = True)
 
@@ -71,9 +70,7 @@ class Level(Scene):
         for object in self.objects:
             if not isinstance(object, Brick):
                 self.remove_object(object)
-        self.add_object(self.bar)
-        self.add_object(self.ball)
-        self.add_object(self.lives_text)
+        self.objects.extend([self.bar, self.ball, self.lives_text])
 
     def win(self):
         if self.consecutive:
@@ -102,8 +99,6 @@ class Level(Scene):
     def long_bar(self):
         self.bar.long_bar()
 
-    def control_bar(self, event):
-        self.bar.control(event)
 
     @property
     def lives(self):
@@ -113,5 +108,13 @@ class Level(Scene):
     def lives(self, lives):
         self._lives = lives
         self.lives_text = Text(self, Window.WIDTH - 75, 10, Color.BLACK, f"Lives: {lives}", Font.FONT2)
+
+    @property
+    def bar(self):
+        return self._bar
+    
+    @bar.setter
+    def bar(self, bar):
+        self._bar = bar
 
 

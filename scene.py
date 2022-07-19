@@ -13,7 +13,11 @@ class Scene(ABC):
         self.del_objects = []
         self.bindings = []
         self.background_color = background_color.value
-        self.background_image = image
+        if image:
+            self.image = pygame.image.load(image).convert()
+        else:
+            self.image = None
+        # self.background_image = image
 
     @property
     def objects(self):
@@ -37,9 +41,8 @@ class Scene(ABC):
 
     def render(self, win):
         win.fill(self.background_color)
-        if self.background_image:
-            image = pygame.image.load(self.background_image)
-            image = pygame.transform.scale(image, (Window.WIDTH, Window.HEIGHT))
+        if self.image:
+            image = pygame.transform.scale(self.image, (Window.WIDTH, Window.HEIGHT))
             win.blit(image, (0,0))
         for object in self.objects:
             object.render(win)
@@ -71,7 +74,7 @@ class Scene(ABC):
             if event.type == self.type:
                 if self.key:
                     if self.key == event.key:
-                        self.function(event)
+                        self.function()
                 else:
-                    self.function(event)
+                    self.function()
 

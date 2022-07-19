@@ -20,7 +20,11 @@ class Object(ABC):
        
         self.effects = []
         self._rect = self.surface.get_rect(center = self.center)
-        self.image = image
+        if image:
+            self.image = pygame.image.load(image).convert_alpha()
+        else:
+            self.image = None
+        # self.image = image
         self.color = color.value
         self.color_key = color
         self._removed = False
@@ -43,8 +47,7 @@ class Object(ABC):
         self.surface.fill(self.color)
         win.blit(self.surface, self.rect)
         if self.image:
-            image = pygame.image.load(self.image)
-            image = pygame.transform.scale(image, (self.w, self.h))
+            image = pygame.transform.scale(self.image, (self.w, self.h))
             win.blit(image, self.rect)
 
     @property

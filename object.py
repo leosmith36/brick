@@ -160,6 +160,14 @@ class Object(ABC):
         def remove(self):
             self._removed = True
 
+    @property
+    def alpha(self):
+        return self.color[3]
+    
+    @alpha.setter
+    def alpha(self, alpha):
+        self.color = (self.color[0],self.color[1],self.color[2],alpha)
+
 
     def add_effect(self, effect):
         self.effects.append(effect)

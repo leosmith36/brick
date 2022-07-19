@@ -99,6 +99,11 @@ class Level(Scene):
     def long_bar(self):
         self.bar.long_bar()
 
+    def slow_ball(self):
+        self.ball.slow_ball()
+
+    def fast_bar(self):
+        self.bar.fast_bar()
 
     @property
     def lives(self):

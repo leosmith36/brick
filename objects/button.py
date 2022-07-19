@@ -15,6 +15,10 @@ class Button(Object):
         mouse_pos = pygame.mouse.get_pos()
         return self.rect.collidepoint(mouse_pos)
     def trigger(self, event):
+        if self.hovering():
+            self.alpha = 100
+        else:
+            self.alpha = 255
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.hovering():
                 self.activate()

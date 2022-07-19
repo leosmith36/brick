@@ -19,7 +19,9 @@ class Bar (Object):
         self.control()
         self.x = clamp(self.x, 0, Window.WIDTH - self.w)
     def long_bar(self):
-        self.Effect(self, lambda parent : setattr(parent, "w", parent.WIDTH * 1.5), lambda parent : setattr(parent, "w", parent.WIDTH), 300)
+        self.Effect(self, lambda parent : setattr(parent, "w", parent.WIDTH * 1.5), lambda parent : setattr(parent, "w", parent.WIDTH), 600)
+    def fast_bar(self):
+        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED + 5),lambda parent : setattr(parent, "speed", parent.SPEED), 600)
     def control(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:

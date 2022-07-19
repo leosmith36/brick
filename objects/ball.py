@@ -21,8 +21,7 @@ class Ball (Circle):
         self.speed = self.SPEED
         self.sound = pygame.mixer.Sound(os.path.join("sounds","hit1.mp3"))
         self.hit_bar = False
-        # self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
-        self.vec = self.vec.rotate_rad(math.pi / 3)
+        self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
         self.centerx = self.scene.bar.centerx
     def tick(self):
         if self.locked:

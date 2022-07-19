@@ -19,6 +19,8 @@ class Scene(ABC):
             self.image = None
         # self.background_image = image
 
+        self.Binding(self, pygame.KEYDOWN, lambda : self.game.restart(), key = pygame.K_BACKSPACE)
+
     @property
     def objects(self):
         return self._objects

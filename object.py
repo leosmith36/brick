@@ -5,7 +5,7 @@ from window import Window
 
 
 class Object(ABC):
-    def __init__(self, scene, x, y, w, h, color, center = False, image = None):
+    def __init__(self, scene, x, y, w, h, color, center = False, image = None, visible = True):
 
         self._w = w
         self._h = h
@@ -27,6 +27,7 @@ class Object(ABC):
         self.color = color.value
         self.color_key = color
         self.removed = False
+        self.visible = visible
         self._scene = scene
         self.scene.add_object(self)
     
@@ -35,6 +36,8 @@ class Object(ABC):
         pass
 
     def update(self):
+        if not self.visible:
+            return
         new_effects = []
         for effect in self.effects:
             effect.update()
@@ -44,6 +47,8 @@ class Object(ABC):
         self.tick()
 
     def render(self, win):
+        if not self.visible:
+            return
         self.surface.fill(self.color)
         win.blit(self.surface, self.rect)
         if self.image:
@@ -172,6 +177,12 @@ class Object(ABC):
     def alpha(self, alpha):
         self.color = (self.color[0],self.color[1],self.color[2],alpha)
 
+    @property
+    def visible(self):
+        return self._visible
+    @visible.setter
+    def visible(self, visible):
+        self._visible = visible
 
     def add_effect(self, effect):
         self.effects.append(effect)

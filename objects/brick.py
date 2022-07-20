@@ -18,7 +18,7 @@ class Brick (Object):
         if self.hits >= self.max_hits:
             self.remove()
             if self.item and random.random() < self.chance:
-                self.scene.add_object(self.item)
+                self.item.visible = True
         elif self.hits == self.max_hits - 2 and self.hits != 0:
             self.image = pygame.image.load(os.path.join("images","brick_blank_crack1.png")).convert_alpha()
         elif self.hits == self.max_hits - 1 and self.hits != 0:

@@ -18,7 +18,6 @@ class Text(Object):
         self.text_surface = self.font.render(self.text, 1, color.value)
         self.time = pygame.time.get_ticks()
         self.timer = timer
-        self.visible = True
 
         super().__init__(scene, x, y, self.text_surface.get_width(), self.text_surface.get_height(), Color.CLEAR, center)
     def tick(self):
@@ -37,12 +36,7 @@ class Text(Object):
     @text.setter
     def text(self, text):
         self._text = text
-    @property
-    def visible(self):
-        return self._visible
-    @visible.setter
-    def visible(self, visible):
-        self._visible = visible
+
     @property
     def value(self):
         return self._value

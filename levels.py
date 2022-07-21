@@ -14,16 +14,15 @@ class Levels():
     LEVEL_1 = [
         "",
         "",
-        "1"*10,
+        "0"*10,
+        "0"*10,
         "",
         "",
-        "2"*10,
+        "0"*10,
+        "0"*10,
         "",
         "",
-        "1"*10,
-        "",
-        "",
-        "2"*10
+        "1"*10
     ]
 
     LEVEL_2 = [
@@ -58,11 +57,12 @@ class Levels():
         [LEVEL_3, "stone.png"]
     ]
     BRICKS = {
-        "0" : [1, Color.RED, None],
-        "1" : [2, Color.GREEN, None],
-        "2" : [3, Color.YELLOW, None],
-        "3" : [1, Color.RED, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.long_bar(), 2, center = True), 0.5],
-        "4" : [1, Color.ORANGE, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.long_bar(), 3, center = True, image = os.path.join("images","plus.png")), 1]
+        "0" : [1, Color.GREEN, None],
+        "1" : [2, Color.YELLOW, None],
+        "2" : [3, Color.RED, None],
+        "3" : [1, Color.GREEN, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.long_bar(), 2, center = True, image = os.path.join("images", "plus.png")), 0.1],
+        "4" : [1, Color.YELLOW, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.fast_bar(), 3, center = True, image = os.path.join("images","speed.png")), 0.2],
+        "5" : [1, Color.RED, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.slow_ball(), 4, center = True, image = os.path.join("images","slow.png")), 0.3]
     }
 
     @classmethod
@@ -76,11 +76,12 @@ class Levels():
         bricks = []
         for row in new_level:
             for item in row:
-                props = cls.BRICKS[item]
-                if props[2]:
-                    bricks.append(Brick(scene, x,y,props[1], props[0], props[2](scene, x, y), props[3]))
-                else:
-                    bricks.append(Brick(scene, x,y,props[1], props[0]))
+                if not item == "_":
+                    props = cls.BRICKS[item]
+                    if props[2]:
+                        bricks.append(Brick(scene, x,y,props[1], props[0], props[2](scene, x, y), props[3]))
+                    else:
+                        bricks.append(Brick(scene, x,y,props[1], props[0]))
                 x += Brick.WIDTH + horiz_spacing
             x = 0
             y += Brick.HEIGHT + vert_spacing

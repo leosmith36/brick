@@ -11,9 +11,11 @@ from utils import clamp, collides_bottom, collides_top, collides_right, collides
 from .trail import Trail
 
 class Ball (Circle):
+
     RAD = 10
     SPEED = 5
     COLOR = Color.ORANGE
+
     def __init__(self, scene):
         self.locked = True
         super().__init__(scene, Window.WIDTH // 2, Bar.START_Y - self.RAD, self.RAD, self.COLOR)
@@ -22,6 +24,7 @@ class Ball (Circle):
         self.sound = pygame.mixer.Sound(os.path.join("sounds","hit1.mp3"))
         self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
         self.centerx = self.scene.bar.centerx
+
     def tick(self):
         if self.locked:
             self.control()
@@ -33,25 +36,31 @@ class Ball (Circle):
             vy = self.vec.y
             self.x -= vx
             self.y -= vy
-            self.scene.add_object(Trail(self.scene, self.centerx, self.centery, self.rad, self.color_key))
+            Trail(self.scene, self.centerx, self.centery, self.rad, self.color_key)
+
     def reflect_vertical(self):
         self.vec.x *= -1
         self.sound.play()
+
     def reflect_horizontal(self):
         self.vec.y *= -1
         self.sound.play()
+
     def reflect_bar_top(self, bar_x):
         diff = self.centerx - bar_x
         self.vec = pygame.math.Vector2(0,self.speed).rotate_rad(diff / (50 * (self.scene.bar.w / Bar.WIDTH)))
         self.sound.play()
+
     def unlock(self):
         self.locked = False
+
     def control(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.x -= self.scene.bar.speed
         if keys[pygame.K_RIGHT]:
             self.x += self.scene.bar.speed
+
     def check_collisions(self, object):
         if collides_bottom(self, object) or collides_top(self, object):
             self.reflect_horizontal()
@@ -60,6 +69,7 @@ class Ball (Circle):
         else:
             return False
         return True
+
     def check_bar(self, object):
         if collides_bottom(self, object) or collides_top(self, object):
             self.reflect_bar_top(object.centerx)
@@ -73,6 +83,7 @@ class Ball (Circle):
                 self.reflect_vertical()
             else:
                 self.x += self.scene.bar.speed
+
     def check_bounds(self):
         if self.rect.top - self.vec.y < 0:
             self.reflect_horizontal()

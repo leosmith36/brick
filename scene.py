@@ -3,6 +3,9 @@ import pygame
 
 from objects import Button
 from window import Window
+from objects import Text
+from colors import Color
+from fonts import Font
 
 class Scene(ABC):
 
@@ -20,6 +23,8 @@ class Scene(ABC):
         # self.background_image = image
 
         self.Binding(self, pygame.KEYDOWN, lambda : self.game.restart(), key = pygame.K_BACKSPACE)
+        self.pause_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "PAUSED", Font.FONT1, center = True)
+
 
     @property
     def objects(self):
@@ -42,6 +47,7 @@ class Scene(ABC):
         
 
     def render(self, win):
+        self.pause_text.visible = self.game.paused
         win.fill(self.background_color)
         if self.image:
             image = pygame.transform.scale(self.image, (Window.WIDTH, Window.HEIGHT))
@@ -67,13 +73,16 @@ class Scene(ABC):
 
 
     class Binding:
-        def __init__(self, parent, type, function, key = None):
+        def __init__(self, parent, type, function, key = None, on_paused = False):
             self.parent = parent
             self.type = type
             self.key = key
             self.parent.add_binding(self)
             self.function = function
+            self.on_paused = on_paused
         def check(self, event):
+            if not self.on_paused and self.parent.game.paused:
+                return
             if event.type == self.type:
                 if self.key:
                     if self.key == event.key:

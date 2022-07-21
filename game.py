@@ -34,6 +34,7 @@ class Game():
         self.scene.trigger(event)
 
     def change_scene(self, new_scene):
+        self.paused = False
         self.scene = new_scene
 
     def next_level(self):
@@ -84,8 +85,9 @@ class Game():
         self._paused = paused
 
     def pause(self):
-        self.paused = True
+        if self.paused:
+            self.paused = False
+        else:
+            self.paused = True
 
-    def unpause(self):
-        self.paused = False    
 

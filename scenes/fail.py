@@ -11,12 +11,11 @@ class Fail(Scene):
         super().__init__(game, Color.WHITE)
         self.fail_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "GAME OVER", Font.FONT1, center = True)
         # self.objects.append(self.fail_text)
-        self.time = pygame.time.get_ticks()
+        self.frames = 0
 
     def update(self):
-        newtime = pygame.time.get_ticks()
-        diff = (newtime - self.time) / 1000
-        if diff >= 3:
+        self.frames += 1
+        if self.frames >= 300:
             self.game.restart()
         super().update()
 

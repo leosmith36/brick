@@ -146,7 +146,6 @@ class Object(ABC):
 
     class Effect():
         def __init__(self, parent, effect, reset, max_frames):
-            self.time = pygame.time.get_ticks()
             self.reset = reset
             self.max_frames = max_frames
             self.frames = 0

@@ -16,6 +16,7 @@ class Scene(ABC):
         self.del_objects = []
         self.bindings = []
         self.background_color = background_color.value
+
         if image:
             self.image = pygame.image.load(image).convert()
         else:
@@ -29,7 +30,7 @@ class Scene(ABC):
         remaining_objects = []
         for object in self.objects:
             object.update()
-            if not object.removed and not object in self.del_objects:
+            if not object.is_removed() and not object in self.del_objects:
                 remaining_objects.append(object)
         self.objects = remaining_objects
         self.objects += self.new_objects
@@ -38,7 +39,7 @@ class Scene(ABC):
         
 
     def render(self, win):
-        self.pause_text.visible = self.game.paused
+        self.pause_text.visible = self.game.is_paused()
         win.fill(self.background_color)
         if self.image:
             image = pygame.transform.scale(self.image, (Window.WIDTH, Window.HEIGHT))
@@ -77,7 +78,7 @@ class Scene(ABC):
             self.function = function
             self.on_paused = on_paused
         def check(self, event):
-            if not self.on_paused and self.parent.game.paused:
+            if not self.on_paused and self.parent.game.is_paused():
                 return
             if event.type == self.type:
                 if self.key:

@@ -64,13 +64,8 @@ class Game():
     def time(self):
         return self.elapsed_time
 
-    @property
-    def paused(self):
-        return self._paused
-
-    @paused.setter
-    def paused(self,paused):
-        self._paused = paused
+    def is_paused(self):
+        return self.paused
 
     def pause(self):
         if self.paused:
@@ -80,7 +75,7 @@ class Game():
 
     @property
     def scene(self):
-        return self.scene
+        return self._scene
 
     @scene.setter
     def scene(self, scene):

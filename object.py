@@ -18,17 +18,18 @@ class Object(ABC):
             self.x = x
             self.y = y
        
-        self.effects = []
-        self._rect = self.surface.get_rect(center = self.center)
         if image:
             self.image = pygame.image.load(image).convert_alpha()
         else:
             self.image = None
+
+        self.effects = []
+        self.rect = self.surface.get_rect(center = self.center)
         self.color = color.value
         self.color_key = color
         self.removed = False
         self.visible = visible
-        self._scene = scene
+        self.scene = scene
         self.scene.add_object(self)
     
     @abstractmethod
@@ -41,7 +42,7 @@ class Object(ABC):
         new_effects = []
         for effect in self.effects:
             effect.update()
-            if not effect.removed:
+            if not effect.is_removed():
                 new_effects.append(effect)
         self.effects = new_effects
         self.tick()
@@ -59,6 +60,10 @@ class Object(ABC):
     def rect(self):
         self._rect.center = self.center
         return self._rect
+    
+    @rect.setter
+    def rect(self, rect):
+        self._rect = rect
 
     @property
     def color(self):
@@ -129,44 +134,14 @@ class Object(ABC):
         self.surface = pygame.Surface((self._w, self._h), pygame.SRCALPHA)
         self._rect = self.surface.get_rect(center = self.center)
 
-    @property
-    def removed(self):
-        return self._removed
-    
-    @removed.setter
-    def removed(self, removed):
-        self._removed = removed
+    def is_removed(self):
+        return self.removed
     
     def remove(self):
-        self._removed = True
+        self.removed = True
 
-    @property
-    def scene(self):
-        return self._scene
-
-    class Effect():
-        def __init__(self, parent, effect, reset, max_frames):
-            self.reset = reset
-            self.max_frames = max_frames
-            self.frames = 0
-            self.parent = parent
-            self.parent.add_effect(self)
-            self._removed = False
-            effect(self.parent)
-            
-        def update(self):
-            self.frames += 1
-            diff = self.max_frames - self.frames
-            if diff <= 0:
-                self.reset(self.parent)
-                self.remove()
-
-        @property
-        def removed(self):
-            return self._removed
-
-        def remove(self):
-            self._removed = True
+    def add_effect(self, effect):
+        self.effects.append(effect)
 
     @property
     def alpha(self):
@@ -179,9 +154,33 @@ class Object(ABC):
     @property
     def visible(self):
         return self._visible
+
     @visible.setter
     def visible(self, visible):
         self._visible = visible
 
-    def add_effect(self, effect):
-        self.effects.append(effect)
+    class Effect():
+        def __init__(self, parent, effect, reset, max_frames):
+            self.reset = reset
+            self.max_frames = max_frames
+            self.frames = 0
+            self.parent = parent
+            self.parent.add_effect(self)
+            self.removed = False
+            effect(self.parent)
+            
+        def update(self):
+            self.frames += 1
+            diff = self.max_frames - self.frames
+            if diff <= 0:
+                self.reset(self.parent)
+                self.remove()
+
+        def is_removed(self):
+            return self.removed
+
+        def remove(self):
+            self.removed = True
+
+
+

@@ -15,10 +15,9 @@ class Game():
         self.scene = Start(self)
         self.clock = pygame.time.Clock()
         self.level = -1
-        self._exited = False
+        self.closed = False
         self.paused = False
         self.elapsed_time = 0
-
 
     def update(self):
         self.clock.tick(Game.FPS)
@@ -27,8 +26,6 @@ class Game():
             self.elapsed_time += self.clock.get_time()
         self.scene.render(self.win)
         pygame.display.update()
-        
-        # print(self.clock.get_fps())
 
     def trigger(self, event):
         self.scene.trigger(event)
@@ -53,24 +50,15 @@ class Game():
     def restart(self):
         self.change_scene(Start(self))
         self.level = -1
-    
-    @property
-    def level(self):
-        return self._level
-
-    @level.setter
-    def level(self, level):
-        self._level = level
-
-    @property
-    def exited(self):
-        return self._exited
-    
-    def exit(self):
-        self._exited = True
 
     def fail(self):
         self.change_scene(Fail(self))
+    
+    def is_closed(self):
+        return self.closed
+
+    def close(self):
+        self.closed = True
 
     @property
     def time(self):
@@ -89,5 +77,13 @@ class Game():
             self.paused = False
         else:
             self.paused = True
+
+    @property
+    def scene(self):
+        return self.scene
+
+    @scene.setter
+    def scene(self, scene):
+        self._scene = scene
 
 

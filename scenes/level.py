@@ -14,7 +14,6 @@ class Level(Scene):
         super().__init__(game, Color.WHITE)
         self.bricks, background = Levels.make_level(level, self)
         self.image = pygame.image.load(background).convert()
-        
 
         self.level = level
         self.bar = Bar(self)

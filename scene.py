@@ -20,19 +20,10 @@ class Scene(ABC):
             self.image = pygame.image.load(image).convert()
         else:
             self.image = None
-        # self.background_image = image
 
         self.Binding(self, pygame.KEYDOWN, lambda : self.game.restart(), key = pygame.K_BACKSPACE)
+
         self.pause_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "PAUSED", Font.FONT1, center = True)
-
-
-    @property
-    def objects(self):
-        return self._objects
-    
-    @objects.setter
-    def objects(self, objects):
-        self._objects = objects
 
     def update(self):
         remaining_objects = []
@@ -52,7 +43,13 @@ class Scene(ABC):
         if self.image:
             image = pygame.transform.scale(self.image, (Window.WIDTH, Window.HEIGHT))
             win.blit(image, (0,0))
+        text_objects = []
         for object in self.objects:
+            if isinstance(object, Text):
+                text_objects.append(object)
+            else:
+                object.render(win)
+        for object in text_objects:
             object.render(win)
 
     def trigger(self, event):
@@ -71,7 +68,6 @@ class Scene(ABC):
     def add_binding(self, binding):
         self.bindings.append(binding)
 
-
     class Binding:
         def __init__(self, parent, type, function, key = None, on_paused = False):
             self.parent = parent
@@ -89,8 +85,4 @@ class Scene(ABC):
                         self.function()
                 else:
                     self.function()
-
-    @property
-    def time(self):
-        return self.game.time
 

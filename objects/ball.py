@@ -20,13 +20,10 @@ class Ball (Circle):
         self.vec = pygame.math.Vector2(0,self.SPEED)
         self.speed = self.SPEED
         self.sound = pygame.mixer.Sound(os.path.join("sounds","hit1.mp3"))
-        # self.hit_bar = False
         self.vec = self.vec.rotate_rad(random.uniform(-math.pi / 8, math.pi / 8))
         self.centerx = self.scene.bar.centerx
     def tick(self):
         if self.locked:
-            # mouse_pos = pygame.mouse.get_pos()
-            # self.centerx = mouse_pos[0]
             self.control()
             self.centerx = clamp(self.centerx, Bar.WIDTH // 2, Window.WIDTH - Bar.WIDTH // 2)
         else:
@@ -62,7 +59,6 @@ class Ball (Circle):
             self.reflect_vertical()
         else:
             return False
-        # self.hit_bar = False
         return True
     def check_bar(self, object):
         if collides_bottom(self, object) or collides_top(self, object):
@@ -77,21 +73,6 @@ class Ball (Circle):
                 self.reflect_vertical()
             else:
                 self.x += self.scene.bar.speed
-        # elif collides_left(self, object) or collides_right(self, object) or self.rect.colliderect(object.rect):
-        #     if self.hit_bar:
-        #         if self.centerx < object.centerx:
-        #             self.x -= self.scene.bar.speed
-        #             # self.vec.x += 1
-        #             # self.vec.scale_to_length(self.speed)
-        #         if self.centerx > object.centerx:
-        #             self.x += self.scene.bar.speed
-        #             # self.vec.x -= 1
-        #             # self.vec.scale_to_length(self.speed)
-        #     else:
-        #         self.reflect_vertical()
-        # else:
-        #     return
-        # self.hit_bar = True
     def check_bounds(self):
         if self.rect.top - self.vec.y < 0:
             self.reflect_horizontal()
@@ -100,9 +81,6 @@ class Ball (Circle):
         elif self.rect.top >= Window.HEIGHT:
             self.scene.fail()
             self.remove()
-        # else:
-        #     return
-        # self.hit_bar = False
 
     def slow_ball(self):
         self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED - 2), lambda parent : setattr(parent, "speed", parent.SPEED), 300)

@@ -10,7 +10,7 @@ def main():
     while active:
         events = pygame.event.get()
         for event in events:
-            if event.type == pygame.QUIT or game.exited:
+            if event.type == pygame.QUIT or game.is_closed():
                 active = False
                 break
             game.trigger(event)

@@ -9,7 +9,7 @@ from colors import Color
 class Bar (Object):
     WIDTH = 100
     HEIGHT = 25
-    SPEED = 6
+    SPEED = 7
     START_Y = Window.HEIGHT - 100 - HEIGHT // 2
     def __init__(self, scene):
         self.speed = self.SPEED

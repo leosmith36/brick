@@ -160,9 +160,10 @@ class Object(ABC):
         self._visible = visible
 
     class Effect():
-        def __init__(self, parent, effect, reset, max_frames):
+        def __init__(self, parent, effect, reset, max_time):
             self.reset = reset
-            self.max_frames = max_frames
+            self.max_time = max_time
+            self.time = parent.scene.game.time
             self.frames = 0
             self.parent = parent
             self.parent.add_effect(self)
@@ -170,9 +171,9 @@ class Object(ABC):
             effect(self.parent)
             
         def update(self):
-            self.frames += 1
-            diff = self.max_frames - self.frames
-            if diff <= 0:
+            newtime = self.parent.scene.game.time
+            diff = newtime - self.time
+            if diff >= self.max_time:
                 self.reset(self.parent)
                 self.remove()
 

@@ -20,9 +20,9 @@ class Bar (Object):
         self.x = clamp(self.x, 0, Window.WIDTH - self.w)
         self.change_image()
     def long_bar(self):
-        self.Effect(self, lambda parent : setattr(parent, "w", parent.WIDTH * 1.5), lambda parent : setattr(parent, "w", parent.WIDTH), 600)
+        self.Effect(self, lambda parent : setattr(parent, "w", parent.WIDTH * 1.5), lambda parent : setattr(parent, "w", parent.WIDTH), 5)
     def fast_bar(self):
-        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED + 5),lambda parent : setattr(parent, "speed", parent.SPEED), 600)
+        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED + 5),lambda parent : setattr(parent, "speed", parent.SPEED), 5)
     def control(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:

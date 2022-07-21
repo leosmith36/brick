@@ -94,5 +94,5 @@ class Ball (Circle):
             self.remove()
 
     def slow_ball(self):
-        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED - 2), lambda parent : setattr(parent, "speed", parent.SPEED), 300)
+        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED - 2), lambda parent : setattr(parent, "speed", parent.SPEED), 5)
 

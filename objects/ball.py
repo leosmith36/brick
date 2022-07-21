@@ -45,7 +45,7 @@ class Ball (Circle):
         self.sound.play()
     def reflect_bar_top(self, bar_x):
         diff = self.centerx - bar_x
-        self.vec = pygame.math.Vector2(0,self.speed).rotate_rad(diff / 50)
+        self.vec = pygame.math.Vector2(0,self.speed).rotate_rad(diff / (50 * (self.scene.bar.w / Bar.WIDTH)))
         self.sound.play()
     def unlock(self):
         self.locked = False

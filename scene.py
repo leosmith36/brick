@@ -65,6 +65,7 @@ class Scene(ABC):
     def add_binding(self, binding):
         self.bindings.append(binding)
 
+
     class Binding:
         def __init__(self, parent, type, function, key = None):
             self.parent = parent
@@ -79,4 +80,8 @@ class Scene(ABC):
                         self.function()
                 else:
                     self.function()
+
+    @property
+    def time(self):
+        return self.game.time
 

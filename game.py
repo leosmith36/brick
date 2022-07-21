@@ -16,12 +16,18 @@ class Game():
         self.clock = pygame.time.Clock()
         self.level = -1
         self._exited = False
+        self.paused = False
+        self.elapsed_time = 0
+
 
     def update(self):
-        self.scene.update()
+        self.clock.tick(Game.FPS)
+        if not self.paused:
+            self.scene.update()
+            self.elapsed_time += self.clock.get_time()
         self.scene.render(self.win)
         pygame.display.update()
-        self.clock.tick(Game.FPS)
+        
         # print(self.clock.get_fps())
 
     def trigger(self, event):
@@ -64,3 +70,22 @@ class Game():
 
     def fail(self):
         self.change_scene(Fail(self))
+
+    @property
+    def time(self):
+        return self.elapsed_time
+
+    @property
+    def paused(self):
+        return self._paused
+
+    @paused.setter
+    def paused(self,paused):
+        self._paused = paused
+
+    def pause(self):
+        self.paused = True
+
+    def unpause(self):
+        self.paused = False    
+

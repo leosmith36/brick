@@ -60,7 +60,7 @@ class Levels():
         [LEVEL_3, "stone.png"]
     ]
     BRICKS = {
-        "0" : [1, Color.GREEN, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.long_bar(), 2, center = True, image = os.path.join("images", "plus.png")), 0.05],
+        "0" : [1, Color.GREEN, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.long_bar(), 2, center = True, image = os.path.join("images", "plus.png")), 1],
         "1" : [2, Color.YELLOW, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.fast_bar(), 3, center = True, image = os.path.join("images","speed.png")), 0.1],
         "2" : [3, Color.RED, lambda scene, x, y : Item(scene, x, y, Color.CLEAR, lambda : scene.slow_ball(), 4, center = True, image = os.path.join("images","slow.png")), 0.2]
     }

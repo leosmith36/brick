@@ -27,7 +27,7 @@ class Ball (Circle):
 
     def tick(self):
         if self.locked:
-            self.control()
+            self.centerx = self.scene.bar.centerx
             self.centerx = clamp(self.centerx, Bar.WIDTH // 2, Window.WIDTH - Bar.WIDTH // 2)
         else:
             self.check_bounds()
@@ -53,14 +53,7 @@ class Ball (Circle):
 
     def unlock(self):
         self.locked = False
-
-    def control(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            self.x -= self.scene.bar.speed
-        if keys[pygame.K_RIGHT]:
-            self.x += self.scene.bar.speed
-
+        
     def check_collisions(self, object):
         if collides_bottom(self, object) or collides_top(self, object):
             self.reflect_horizontal()
@@ -94,5 +87,5 @@ class Ball (Circle):
             self.remove()
 
     def slow_ball(self):
-        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED - 2), lambda parent : setattr(parent, "speed", parent.SPEED), 5)
+        self.Effect(self, lambda parent : setattr(parent, "speed", parent.SPEED - 2), lambda parent : setattr(parent, "speed", parent.SPEED), 5, "slow")
 

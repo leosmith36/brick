@@ -22,7 +22,7 @@ class Scene(ABC):
         else:
             self.image = None
 
-        self.Binding(self, pygame.KEYDOWN, lambda : self.game.restart(), key = pygame.K_BACKSPACE)
+        self.Binding(self, pygame.KEYDOWN, lambda : self.game.restart(), key = pygame.K_BACKSPACE, on_paused = True)
 
         self.pause_text = Text(self, Window.WIDTH // 2, 100, Color.BLACK, "PAUSED", Font.FONT1, center = True)
 

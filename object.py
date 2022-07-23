@@ -160,7 +160,11 @@ class Object(ABC):
         self._visible = visible
 
     class Effect():
-        def __init__(self, parent, effect, reset, max_time):
+        def __init__(self, parent, effect, reset, max_time, key):
+            for effect in parent.effects:
+                if effect.get_key() == key:
+                    effect.reset_time()
+                    return
             self.reset = reset
             self.max_time = max_time
             self.time = parent.scene.game.time
@@ -168,11 +172,12 @@ class Object(ABC):
             self.parent = parent
             self.parent.add_effect(self)
             self.removed = False
+            self.key = key
             effect(self.parent)
             
         def update(self):
             newtime = self.parent.scene.game.time
-            diff = newtime - self.time
+            diff = (newtime - self.time) / 1000
             if diff >= self.max_time:
                 self.reset(self.parent)
                 self.remove()
@@ -182,6 +187,12 @@ class Object(ABC):
 
         def remove(self):
             self.removed = True
+
+        def get_key(self):
+            return self.key
+
+        def reset_time(self):
+            self.time = self.parent.scene.game.time
 
 
 
